@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1173d4",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="relative flex min-h-screen w-full flex-col justify-between overflow-x-hidden">
+<div class="pb-32">
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center p-4">
+<button class="flex size-10 items-center justify-center rounded-full text-gray-900 dark:text-white">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="flex-1 text-center text-lg font-bold text-gray-900 dark:text-white pr-10">Profile</h1>
+</div>
+</header>
+<main class="p-4">
+<div class="flex flex-col items-center gap-6">
+<div class="flex flex-col items-center gap-4">
+<div class="relative">
+<img alt="Ethan Carter's profile picture" class="h-32 w-32 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwTyF1cr9Gf5nceYUSeLj5xpXPq9kFtmKupq6P5Ul17JGNfBkEaUY2GA8FsMP8-qK7Xn1JVBjSrhq_C-bGZx0zR6-jnhrIO83Y-_r5a7RmOrb_zCIdyI-0AqOpNsodfcjkhJxwIa9RpfsUaSyTPe581A4ltwlA3ds26JLP96T8TTT0uwTntEbWmQ2djCtqQQPvFH-5YdEuvXIcr6SOH7R4MKOq7pKmenFPycL2SCGGVz4rPzGQYrM7VVsSQcsHAeFE9bQhjW1757Mt"/>
+<div class="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white text-sm font-bold">#12</div>
+</div>
+<div class="text-center">
+<p class="text-2xl font-bold text-gray-900 dark:text-white">Ethan Carter</p>
+<p class="text-base text-gray-500 dark:text-gray-400">GDG Cloud Developer</p>
+</div>
+</div>
+</div>
+<section class="mt-8">
+<h2 class="px-2 pb-2 text-lg font-bold text-gray-900 dark:text-white">Skills</h2>
+<div class="flex flex-wrap gap-2 p-2">
+<span class="cursor-pointer rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:bg-primary/20">Android</span>
+<span class="cursor-pointer rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:bg-primary/20">Kotlin</span>
+<span class="cursor-pointer rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:bg-primary/20">Jetpack Compose</span>
+<span class="cursor-pointer rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:bg-primary/20">Firebase</span>
+<span class="cursor-pointer rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:bg-primary/20">Machine Learning</span>
+</div>
+</section>
+<section class="mt-6">
+<h2 class="px-2 pb-2 text-lg font-bold text-gray-900 dark:text-white">Progress</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
+<p class="text-sm font-medium text-gray-600 dark:text-gray-400">Quests Completed</p>
+<p class="text-3xl font-bold text-gray-900 dark:text-white">15</p>
+</div>
+<div class="rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
+<p class="text-sm font-medium text-gray-600 dark:text-gray-400">Labs Finished</p>
+<p class="text-3xl font-bold text-gray-900 dark:text-white">22</p>
+</div>
+<div class="col-span-2 rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
+<p class="text-sm font-medium text-gray-600 dark:text-gray-400">Last Lab Completion</p>
+<p class="text-xl font-bold text-gray-900 dark:text-white">March 15, 2024</p>
+</div>
+</div>
+</section>
+<section class="mt-8">
+<h2 class="px-2 pb-2 text-lg font-bold text-gray-900 dark:text-white">Activity Feed</h2>
+<div class="relative flex flex-col pl-6">
+<div class="absolute left-0 top-0 h-full w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+<div class="relative flex items-start gap-4 pb-8">
+<div class="absolute left-0 top-3 -ml-[11.5px] flex h-6 w-6 items-center justify-center rounded-full bg-background-light dark:bg-background-dark">
+<div class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white">
+<span class="material-symbols-outlined text-sm">emoji_events</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-medium text-gray-800 dark:text-gray-200">Completed Quest: Android Basics</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">March 10, 2024</p>
+</div>
+</div>
+<div class="relative flex items-start gap-4 pb-8">
+<div class="absolute left-0 top-3 -ml-[11.5px] flex h-6 w-6 items-center justify-center rounded-full bg-background-light dark:bg-background-dark">
+<div class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white">
+<span class="material-symbols-outlined text-sm">science</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-medium text-gray-800 dark:text-gray-200">Finished Lab: Kotlin Fundamentals</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">March 5, 2024</p>
+</div>
+</div>
+<div class="relative flex items-start gap-4 pb-8">
+<div class="absolute left-0 top-3 -ml-[11.5px] flex h-6 w-6 items-center justify-center rounded-full bg-background-light dark:bg-background-dark">
+<div class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white">
+<span class="material-symbols-outlined text-sm">group</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-medium text-gray-800 dark:text-gray-200">Joined Study Jams</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">February 20, 2024</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<footer class="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-background-light/90 pb-safe dark:border-gray-800 dark:bg-background-dark/90 backdrop-blur-sm">
+<nav class="flex items-center justify-around p-2">
+<a class="flex flex-col items-center gap-1 p-2 text-gray-500 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="text-xs font-medium">Leaderboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 rounded-full bg-primary/10 p-2 px-4 text-primary dark:bg-primary/20" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs font-medium">Profile</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-gray-500 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined">info</span>
+<span class="text-xs font-medium">About</span>
+</a>
+</nav>
+</footer>
+</div>
+
+</body></html>

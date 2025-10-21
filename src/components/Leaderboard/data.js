@@ -1,0 +1,65 @@
+export const TOP_THREE_DATA = [
+    {
+        rank: 2,
+        name: '2nd Place',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAGD4TNT0hWPtMLB-0MVTiSejWlZCVGzdD-JxPUCHSfIjall12ebkobI-DqCOeze3_-nQd1iYv1BlFrMZUpU10iSTqhRE6Nd70gginR2oyEWwce3lX0P5-z27FK2Ru-vNgsF_KIL9tbyDzhgD-ql5LZAe7Rw03X0E9C59sahPvJxq6ch_9Vn431gygQdAJ2l6Rp3N-MlvpVeXTLeXNwHevBu9I-pGuCJGlYoMNBjKpnQwRV2smZ2Xo0f8FXzVoqh5MV4NNr60W8kGvl',
+        points: 950,
+        size: 'w-20 h-20',
+        border: 'border-[#C0C0C0]',
+        badge: 'bg-[#C0C0C0]',
+    },
+    {
+        rank: 1,
+        name: '1st Place',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC0WAvpER0ilGFAbxnIXlcIjknfNoQfv5X1YQefU7rp1uW1LIkP8IBR2DjSiDJPFgJ-JIHWnGefbxOwWv6MkO7ULMPKpIOujb3ndo6O5GdJeHA80fTPgJ3HV_gUSvN5JvYKK0DiJyxNptkZv8yc9PPmbChIzzTgHiCXp6IvR9Kd5RYg_obEiL_TfQYqRiRlUsk4aKCJT_YKEg7JE8WKf74a7xZTb8QXGgpftub2jKLzCFMgxUE4v-bxPQx7VLycFmQaoS5GS9-qfbwq',
+        points: 1000,
+        size: 'w-24 h-24',
+        border: 'border-[#FFD700]',
+        badge: 'bg-[#FFD700]',
+        textSize: '',
+    },
+    {
+        rank: 3,
+        name: '3rd Place',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVVaMxcN62bmTwxeYgaYNuQWoj9SvBXm-rG-Jz-J9CESRmKhQM5EsG6HRowKDuqHTA5PUs6F6JV3lXfELPR2XukPuucegbfMtazp9aT0lbzvIh_g_bZX5JjxscAixfbR8pyJ6hoVer8xrk1wjGbxGm7gUo82gKb-0YU-cd9lXckLYcTlixkuLIppI9ZV-fd_Z869QyQapi0J58cn92A8mkZJjlFYKiXAjr2hNvvi8qyg_OTn705MLfjQN-krwg7ripWw3NWJaGXLh4',
+        points: 900,
+        size: 'w-20 h-20',
+        border: 'border-[#CD7F32]',
+        badge: 'bg-[#CD7F32]',
+    },
+]
+
+export const LEADERBOARD_DATA = [
+    {
+        rank: 4,
+        name: 'Ethan Carter',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwH-Aw01ZvdRhlXIXdx_PmWZhIWZEO1ig-xpT9KGOOnAC7l2HeFx4YwMOVv9zFtX25zIwHTWqq1g0p7GFT5RHWtjP6AfcKFwjGNAOGZ1JzyyX-JxOnlIAd62R-fOI1eXReJIesFMwbT6tvGCl2CDIYDNK7bb_PWuIlbJGiGTTnsl0yB9JTiqXqFUl4njpcMW--AACZOr3K5gRje6SaMX8PC5NTPA961q1g9HfIsWEdKbOPKVrPKYNJSFPyvjXQW7P2wGH8Ritw75qV',
+        quests: '80/88 Quests',
+        points: 1000,
+        completion: 90.91,
+    },
+    {
+        rank: 5,
+        name: 'Olivia Bennett',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBqyLCLEM_gikQIGNc5kgXIhLW1GH7jpbzY9-XPDoK9p1sI6q0Vc7qi2EiwtJL2Ph93O6x7ICvk_q1l925PIPN-rh93gqeimdafWOvu0NDHbP5H7KU-HLE4r7LIvTmgLMkOTT85pQWLU4DRu8SwsChDat8Ry9ey5uQl7k-mcsP7-XwzCmCvtI8FpRGyet8rUBS02UwSd_LAWduX7UNBAeev4mX8gPXA4HH4M3DHdIZK3fAlde08VoT7NqUwqFHCWFQ5sBIKA8Y2uKXY',
+        quests: '75/88 Quests',
+        points: 950,
+        completion: 85.23,
+    },
+    {
+        rank: 6,
+        name: 'Noah Thompson',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC5KHT0b6vYRVhRKooNBLq-m9AaKHaSiNyxVv7bYW1F2G-7cTKIHXrwbUChmRinNUGrNZRAV3UvC62Ft6wrlD72zwMWy-GaKiG3zLv2CWed-IpdsPrWn6Oz9YE_Brn-J282Lfr01SJ-7fNJNALNnKpC2_S-68o8pcul2OB1CEsWDrmQDOTQ91Ayo9rgdjedoYXnjyNpUxRiqdQeiHECLtUAHX6yd9CmvYg6sF5O7ISRA1trTyUKf-fbnX13_sNW49489SksDURjGaki',
+        quests: '70/88 Quests',
+        points: 900,
+        completion: 79.55,
+    },
+    {
+        rank: 7,
+        name: 'Ava Harper',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBMKPxzbzH0mKMqUMbtq6mvxV-7-3q-JnyJV8R3X5TkKGt5gOoJhNzhw0yIM0B9dhbCmfCrxwZ_qKwrzwGFxqf2oVhmKqonKt5qN0e1Qkj54BDukQ9LZjMlEggVVKtLmwTvlA-4sKCV8XS_koisSz-oaK6RQqXT7R6vG0ronVSC_3r1-9dbrRLYCc-LzxZEVy7ZvgRwOv2t6fv6r1fEEc5EHemqE-3vN2XNgCfrnyOwAtBmU8LbUavH9XExyN0O3riW5L5aVD7xd0LW',
+        quests: '65/88 Quests',
+        points: 850,
+        completion: 73.86,
+    },
+];

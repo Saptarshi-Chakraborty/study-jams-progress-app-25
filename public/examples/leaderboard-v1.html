@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<title>GDG Study Jams Leaderboard</title>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Space+Grotesk:wght@400;500;700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1173d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+            "gold": "#FFD700",
+            "silver": "#C0C0C0",
+            "bronze": "#CD7F32",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="max-w-md mx-auto min-h-screen flex flex-col">
+<header class="p-4 bg-background-light dark:bg-background-dark sticky top-0 z-10">
+<div class="flex items-center justify-between">
+<button class="p-2">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<h1 class="text-xl font-bold">Study Jams</h1>
+<div class="w-10"></div>
+</div>
+<h2 class="text-2xl font-bold text-center mt-4">GDG on Campus</h2>
+</header>
+<main class="flex-grow pb-24">
+<div class="flex items-end justify-center pt-8 pb-4 gap-4 text-center">
+<div class="flex flex-col items-center">
+<div class="relative">
+<img alt="2nd Place" class="w-20 h-20 rounded-full border-4 border-silver object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGD4TNT0hWPtMLB-0MVTiSejWlZCVGzdD-JxPUCHSfIjall12ebkobI-DqCOeze3_-nQd1iYv1BlFrMZUpU10iSTqhRE6Nd70gginR2oyEWwce3lX0P5-z27FK2Ru-vNgsF_KIL9tbyDzhgD-ql5LZAe7Rw03X0E9C59sahPvJxq6ch_9Vn431gygQdAJ2l6Rp3N-MlvpVeXTLeXNwHevBu9I-pGuCJGlYoMNBjKpnQwRV2smZ2Xo0f8FXzVoqh5MV4NNr60W8kGvl"/>
+<div class="absolute -bottom-2 -right-2 bg-silver text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</div>
+</div>
+<p class="font-bold mt-2 text-sm">2nd Place</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">950 pts</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative">
+<img alt="1st Place" class="w-24 h-24 rounded-full border-4 border-gold object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0WAvpER0ilGFAbxnIXlcIjknfNoQfv5X1YQefU7rp1uW1LIkP8IBR2DjSiDJPFgJ-JIHWnGefbxOwWv6MkO7ULMPKpIOujb3ndo6O5GdJeHA80fTPgJ3HV_gUSvN5JvYKK0DiJyxNptkZv8yc9PPmbChIzzTgHiCXp6IvR9Kd5RYg_obEiL_TfQYqRiRlUsk4aKCJT_YKEg7JE8WKf74a7xZTb8QXGgpftub2jKLzCFMgxUE4v-bxPQx7VLycFmQaoS5GS9-qfbwq"/>
+<div class="absolute -bottom-2 -right-2 bg-gold text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</div>
+</div>
+<p class="font-bold mt-2">1st Place</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">1000 pts</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative">
+<img alt="3rd Place" class="w-20 h-20 rounded-full border-4 border-bronze object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVVaMxcN62bmTwxeYgaYNuQWoj9SvBXm-rG-Jz-J9CESRmKhQM5EsG6HRowKDuqHTA5PUs6F6JV3lXfELPR2XukPuucegbfMtazp9aT0lbzvIh_g_bZX5JjxscAixfbR8pyJ6hoVer8xrk1wjGbxGm7gUo82gKb-0YU-cd9lXckLYcTlixkuLIppI9ZV-fd_Z869QyQapi0J58cn92A8mkZJjlFYKiXAjr2hNvvi8qyg_OTn705MLfjQN-krwg7ripWw3NWJaGXLh4"/>
+<div class="absolute -bottom-2 -right-2 bg-bronze text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</div>
+</div>
+<p class="font-bold mt-2 text-sm">3rd Place</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">900 pts</p>
+</div>
+</div>
+<div class="px-4 py-4 space-y-2">
+<div class="flex gap-2 overflow-x-auto pb-2">
+<button class="px-4 py-1.5 text-sm rounded-full bg-primary text-white font-medium">All-Time</button>
+<button class="px-4 py-1.5 text-sm rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-medium">Weekly</button>
+<button class="px-4 py-1.5 text-sm rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-medium">Monthly</button>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2">
+<button class="px-4 py-1.5 text-sm rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-medium flex items-center gap-1">Rank <span class="material-symbols-outlined text-base">arrow_downward</span></button>
+<button class="px-4 py-1.5 text-sm rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-medium">Name</button>
+<button class="px-4 py-1.5 text-sm rounded-full bg-primary/10 dark:bg-primary/20 text-primary font-medium">Completion</button>
+</div>
+</div>
+<div class="px-2 space-y-2">
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark p-2 rounded-lg">
+<p class="font-bold w-6 text-center text-gray-500 dark:text-gray-400">4</p>
+<img alt="Ethan Carter" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwH-Aw01ZvdRhlXIXdx_PmWZhIWZEO1ig-xpT9KGOOnAC7l2HeFx4YwMOVv9zFtX25zIwHTWqq1g0p7GFT5RHWtjP6AfcKFwjGNAOGZ1JzyyX-JxOnlIAd62R-fOI1eXReJIesFMwbT6tvGCl2CDIYDNK7bb_PWuIlbJGiGTTnsl0yB9JTiqXqFUl4njpcMW--AACZOr3K5gRje6SaMX8PC5NTPA961q1g9HfIsWEdKbOPKVrPKYNJSFPyvjXQW7P2wGH8Ritw75qV"/>
+<div class="flex-grow">
+<p class="font-medium text-gray-900 dark:text-white">Ethan Carter</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">80/88 Quests</p>
+</div>
+<div class="flex flex-col items-end">
+<p class="font-bold text-primary">1000</p>
+<div class="w-20 h-1.5 bg-primary/20 rounded-full mt-1">
+<div class="h-full bg-primary rounded-full" style="width: 90.9091%;"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark p-2 rounded-lg">
+<p class="font-bold w-6 text-center text-gray-500 dark:text-gray-400">5</p>
+<img alt="Olivia Bennett" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqyLCLEM_gikQIGNc5kgXIhLW1GH7jpbzY9-XPDoK9p1sI6q0Vc7qi2EiwtJL2Ph93O6x7ICvk_q1l925PIPN-rh93gqeimdafWOvu0NDHbP5H7KU-HLE4r7LIvTmgLMkOTT85pQWLU4DRu8SwsChDat8Ry9ey5uQl7k-mcsP7-XwzCmCvtI8FpRGyet8rUBS02UwSd_LAWduX7UNBAeev4mX8gPXA4HH4M3DHdIZK3fAlde08VoT7NqUwqFHCWFQ5sBIKA8Y2uKXY"/>
+<div class="flex-grow">
+<p class="font-medium text-gray-900 dark:text-white">Olivia Bennett</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">75/88 Quests</p>
+</div>
+<div class="flex flex-col items-end">
+<p class="font-bold text-primary">950</p>
+<div class="w-20 h-1.5 bg-primary/20 rounded-full mt-1">
+<div class="h-full bg-primary rounded-full" style="width: 85.2273%;"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark p-2 rounded-lg">
+<p class="font-bold w-6 text-center text-gray-500 dark:text-gray-400">6</p>
+<img alt="Noah Thompson" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5KHT0b6vYRVhRKooNBLq-m9AaKHaSiNyxVv7bYW1F2G-7cTKIHXrwbUChmRinNUGrNZRAV3UvC62Ft6wrlD72zwMWy-GaKiG3zLv2CWed-IpdsPrWn6Oz9YE_Brn-J282Lfr01SJ-7fNJNALNnKpC2_S-68o8pcul2OB1CEsWDrmQDOTQ91Ayo9rgdjedoYXnjyNpUxRiqdQeiHECLtUAHX6yd9CmvYg6sF5O7ISRA1trTyUKf-fbnX13_sNW49489SksDURjGaki"/>
+<div class="flex-grow">
+<p class="font-medium text-gray-900 dark:text-white">Noah Thompson</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">70/88 Quests</p>
+</div>
+<div class="flex flex-col items-end">
+<p class="font-bold text-primary">900</p>
+<div class="w-20 h-1.5 bg-primary/20 rounded-full mt-1">
+<div class="h-full bg-primary rounded-full" style="width: 79.5455%;"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark p-2 rounded-lg">
+<p class="font-bold w-6 text-center text-gray-500 dark:text-gray-400">7</p>
+<img alt="Ava Harper" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMKPxzbzH0mKMqUMbtq6mvxV-7-3q-JnyJV8R3X5TkKGt5gOoJhNzhw0yIM0B9dhbCmfCrxwZ_qKwrzwGFxqf2oVhmKqonKt5qN0e1Qkj54BDukQ9LZjMlEggVVKtLmwTvlA-4sKCV8XS_koisSz-oaK6RQqXT7R6vG0ronVSC_3r1-9dbrRLYCc-LzxZEVy7ZvgRwOv2t6fv6r1fEEc5EHemqE-3vN2XNgCfrnyOwAtBmU8LbUavH9XExyN0O3riW5L5aVD7xd0LW"/>
+<div class="flex-grow">
+<p class="font-medium text-gray-900 dark:text-white">Ava Harper</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">65/88 Quests</p>
+</div>
+<div class="flex flex-col items-end">
+<p class="font-bold text-primary">850</p>
+<div class="w-20 h-1.5 bg-primary/20 rounded-full mt-1">
+<div class="h-full bg-primary rounded-full" style="width: 73.8636%;"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark p-2 rounded-lg">
+<p class="font-bold w-6 text-center text-gray-500 dark:text-gray-400">8</p>
+<img alt="Liam Foster" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlQG9g2DtciYhHc2hqn61Ewi5nzxGlS2QEkG51rItlzYlpF5gJWPMsOolVKc9oDv49VS88T5tmzCo05b2W-zLnWzdEnBr3uHJesduXD2rveYhPY0qO8aFLZ84RguYMwUeCnOw_2wBhyrCRvtypET2DpRcDlJUzXbvQvbX4F4lu1q9DewyPHUrEqFDyCXWei11Ox8kGFpNchmQa02sgXxYvAe-2xs4CAkeoflY6WaM4idl8VHkDoBW63HrpiqoOHJI0SDo8CiG2xRWH"/>
+<div class="flex-grow">
+<p class="font-medium text-gray-900 dark:text-white">Liam Foster</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">60/88 Quests</p>
+</div>
+<div class="flex flex-col items-end">
+<p class="font-bold text-primary">800</p>
+<div class="w-20 h-1.5 bg-primary/20 rounded-full mt-1">
+<div class="h-full bg-primary rounded-full" style="width: 68.1818%;"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm p-4 border-t border-primary/20">
+<div class="flex items-center gap-4">
+<p class="font-bold w-6 text-center text-gray-500 dark:text-gray-400">11</p>
+<img alt="You" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5hFO5lSrBm-ox1m417nc4qFXojSSuMNxEr9J6hL8glZh8V35hiX7dE_Zmkbme1j408mmHp5MSUX_wMW8yd50ol-GGNZV07oK_nyWwwKfRlt4QLIk1gqrQAc575pKnk1x648FXJdroRC6pRrp5jl5PHqcbraX33wI1eVT0umnNlWBumqolOM-fUOgWX7Hlp_XUw1pv_Eav76rbFuAhssZj_-M4wFdlm2K4llO9qGpTDqrZD2Wf6c_0ZZJdN3cdltTK13r9kNckQkC0"/>
+<div class="flex-grow">
+<p class="font-medium text-gray-900 dark:text-white">You</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">45/88 Quests</p>
+</div>
+<div class="flex flex-col items-end">
+<p class="font-bold text-primary">650</p>
+<div class="w-20 h-1.5 bg-primary/20 rounded-full mt-1">
+<div class="h-full bg-primary rounded-full" style="width: 51.1364%;"></div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+
+</body></html>
