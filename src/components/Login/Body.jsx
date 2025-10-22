@@ -1,20 +1,121 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const BodyLogin = () => {
+  const router = useRouter()
   const [step, setStep] = useState('email')
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [resendTimer, setResendTimer] = useState(0)
 
-  const handleEmailSubmit = (event) => {
+  // Timer effect for OTP resend countdown
+  useEffect(() => {
+    let interval = null;
+    if (resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [resendTimer]);
+
+  const handleEmailSubmit = async (event) => {
     event.preventDefault()
     if (!email.trim()) return
-    setStep('otp')
+
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL
+    const API = `${BASE_URL}/auth/send-otp`
+
+    const trimmedEmail = email.trim().toLowerCase()
+
+    try {
+      setLoading(true)
+      setError(null)
+
+      const response = await fetch(API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: trimmedEmail,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.status === 'success') {
+        setEmail(trimmedEmail)
+        setStep('otp')
+        setResendTimer(60) // Set 60 seconds timer for resend
+      } else {
+        if (data?.type === "no-user") {
+          setError("No user found with this email")
+        } else {
+          setError(data.message || 'Failed to send OTP')
+        }
+        alert(`Error: ${data.message || 'Failed to send OTP'}`)
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to send OTP')
+      alert(`Error: ${err.message || 'Failed to send OTP'}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleOtpSubmit = (event) => {
+  const handleResendOtp = async () => {
+    if (resendTimer > 0) return;
+    await handleEmailSubmit({ preventDefault: () => {} });
+  }
+
+  const handleOtpSubmit = async (event) => {
     event.preventDefault()
     if (!otp.trim()) return
-    // TODO: verify OTP
+
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL
+    const API = `${BASE_URL}/auth/verify-otp`
+    const trimmedOtp = otp.trim()
+
+    try {
+      setLoading(true)
+      setError(null)
+
+      const response = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp: trimmedOtp }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.status === 'success' && data.authToken) {
+        localStorage.setItem('authToken', data.authToken)
+        router.push('/my-profile')
+      } else {
+        if (data.error === "already-used") {
+          setError("This OTP has already been used. Please request a new one.");
+          setOtp('');
+          // Optionally auto-switch back to email step after a delay
+          setTimeout(() => {
+            setStep('email');
+          }, 3000);
+        } else {
+          setError(data.message || 'Failed to verify OTP')
+        }
+        alert(`Error: ${data.message || 'Failed to verify OTP'}`)
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to verify OTP')
+      alert(`Error: ${err.message || 'Failed to verify OTP'}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -43,9 +144,13 @@ const BodyLogin = () => {
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {step === 'email'
                     ? 'Receive a one-time passcode to continue.'
-                    : `We sent a 6-digit code to ${email}.`}
+                    : `We sent a 5-digit code to ${email}.`}
                 </p>
               </div>
+
+              {error && (
+                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+              )}
 
               {step === 'email' ? (
                 <form onSubmit={handleEmailSubmit} className="space-y-4">
@@ -57,15 +162,17 @@ const BodyLogin = () => {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       placeholder="name@example.com"
-                      className="mt-2 block w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                      disabled={loading}
+                      className="mt-2 block w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </label>
 
                   <button
                     type="submit"
-                    className="w-full rounded-full bg-blue-600 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600/40"
+                    disabled={loading}
+                    className="w-full rounded-full bg-blue-600 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600/40 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Send OTP
+                    {loading ? 'Sending...' : 'Send OTP'}
                   </button>
                 </form>
               ) : (
@@ -75,12 +182,13 @@ const BodyLogin = () => {
                     <input
                       type="text"
                       inputMode="numeric"
-                      pattern="\d{6}"
-                      maxLength={6}
+                      pattern="\d{5}"
+                      maxLength={5}
                       required
                       value={otp}
                       onChange={(event) => setOtp(event.target.value)}
-                      placeholder="Enter 6-digit code"
+                      placeholder="Enter 5-digit code"
+                      disabled={loading}
                       className="mt-2 tracking-[0.35em] text-center uppercase block w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-lg font-semibold text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     />
                   </label>
@@ -88,8 +196,9 @@ const BodyLogin = () => {
                   <button
                     type="submit"
                     className="w-full rounded-full bg-blue-600 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600/40"
+                    disabled={loading}
                   >
-                    Verify &amp; Continue
+                    {loading ? 'Verifying...' : 'Verify & Continue'}
                   </button>
 
                   <button
@@ -102,6 +211,23 @@ const BodyLogin = () => {
                   >
                     Use a different email
                   </button>
+
+                  <div className="mt-4 text-center">
+                    {resendTimer > 0 ? (
+                      <p className="text-sm text-gray-500">
+                        Resend OTP in {resendTimer} seconds
+                      </p>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleResendOtp}
+                        disabled={loading || resendTimer > 0}
+                        className="text-sm text-blue-600 hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed"
+                      >
+                        Didn't receive code? Send again
+                      </button>
+                    )}
+                  </div>
                 </form>
               )}
             </section>
