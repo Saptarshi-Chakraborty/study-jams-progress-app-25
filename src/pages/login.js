@@ -1,3 +1,5 @@
+"use client"
+
 import BodyLogin from '@/components/Login/Body'
 import Head from 'next/head'
 

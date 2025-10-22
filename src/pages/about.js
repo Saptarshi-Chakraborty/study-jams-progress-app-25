@@ -1,3 +1,5 @@
+"use client"
+
 import BodyAbout from '@/components/About/BodyAbout'
 import Head from 'next/head'
 

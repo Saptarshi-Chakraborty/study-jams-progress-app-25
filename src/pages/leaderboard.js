@@ -1,3 +1,5 @@
+"use client"
+
 import BodyLeaderboard from '@/components/Leaderboard/BodyLeaderboard'
 import Head from 'next/head'
 

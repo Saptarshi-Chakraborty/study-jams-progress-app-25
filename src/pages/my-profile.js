@@ -1,3 +1,5 @@
+"use client"
+
 import BodyMyProfile from '@/components/MyProfile/BodyMyProfile'
 import Head from 'next/head'
 

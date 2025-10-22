@@ -1,3 +1,5 @@
+"use client"
+
 import BodyViewAllChapters from '@/components/admin/chapters/BodyViewAllChapters'
 import Head from 'next/head'
 

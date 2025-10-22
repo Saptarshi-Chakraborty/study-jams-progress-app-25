@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import { Button } from "@/UI/Button";
 import {
@@ -11,7 +13,7 @@ import {
     DialogClose,
 } from "@/UI/Dialog";
 
-const AddNewChapterDialog = () => {
+const AddNewChapterDialog = ({ onSuccess }) => {
     const nameRef = React.useRef();
     const urlRef = React.useRef();
     const cityRef = React.useRef();
@@ -52,8 +54,10 @@ const AddNewChapterDialog = () => {
 
             if (response.ok) {
                 alert('Chapter created successfully!');
-
                 resetForm();
+                if (onSuccess) {
+                    onSuccess()
+                }
             } else {
                 alert(`Error: ${data.message || 'Failed to create chapter.'}`);
             }
