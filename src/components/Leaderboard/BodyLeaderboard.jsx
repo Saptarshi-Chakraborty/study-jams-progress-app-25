@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ArrowLeft, ArrowDown } from 'lucide-react'
 import { LEADERBOARD_DATA, TOP_THREE_DATA } from './data'
+import BottomNavigation from '../shared/BottomNavigation'
 
 const BodyLeaderboard = () => {
     const [timeFilter, setTimeFilter] = useState('all-time')
@@ -14,14 +15,12 @@ const BodyLeaderboard = () => {
             <div className="max-w-md mx-auto w-full h-full flex flex-col">
                 {/* Header */}
                 <header className="p-4 bg-gray-50 dark:bg-gray-900 flex-shrink-0">
-                    <div className="flex items-center justify-between">
-                        <button className="p-2">
-                            <ArrowLeft className="w-5 h-5" />
-                        </button>
-                        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Study Jams</h1>
-                        <div className="w-10"></div>
+                    <div className="flex items-center justify-center">
+
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 uppercase">Study Jams '25</h1>
+
                     </div>
-                    <h2 className="text-2xl font-bold text-center mt-4 text-gray-900 dark:text-gray-100">GDG on Campus</h2>
+                    <h2 className="text-l font-bold text-center mt-1 text-gray-900 dark:text-gray-100">GDG on Campus</h2>
                 </header>
 
                 {/* Top 3 Podium - Fixed */}
@@ -53,7 +52,7 @@ const BodyLeaderboard = () => {
                 </div>
 
                 {/* Scrollable Section */}
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto pb-20">
                     {/* Filters */}
                     <div className="px-4 py-4 space-y-2 bg-gray-50 dark:bg-gray-900 sticky top-0 z-10">
                         {/* Time Filter */}
@@ -103,8 +102,7 @@ const BodyLeaderboard = () => {
                             </button>
                             <button
                                 onClick={() => setSortBy('completion')}
-                                className="px-4 py-1.5 text-sm rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap"
-                            >
+                                className="px-4 py-1.5 text-sm rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium whitespace-nowrap">
                                 Completion
                             </button>
                         </div>
@@ -115,7 +113,7 @@ const BodyLeaderboard = () => {
                         {leaderboardData.map((participant) => (
                             <div
                                 key={participant.rank}
-                                className="flex items-center gap-4 bg-white dark:bg-gray-800 p-2 rounded-lg"
+                                className="flex items-center gap-4 bg-gray-50 dark:bg-gray-900 p-2 rounded-lg mb-0"
                             >
                                 <p className="font-bold w-6 text-center text-gray-500 dark:text-gray-400">
                                     {participant.rank}
@@ -146,6 +144,9 @@ const BodyLeaderboard = () => {
                         ))}
                     </div>
                 </div>
+
+                {/* Footer Navigation */}
+                <BottomNavigation activeTab="leaderboard" />
             </div>
         </div>
     )

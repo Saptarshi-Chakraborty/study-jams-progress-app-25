@@ -5,7 +5,7 @@ const Leaderboard = () => {
     return (
         <>
             <Head>
-                <title>Leaderboard - Study Jams Progress Tracker</title>
+                <title>Leaderboard | Study Jams Progress Tracker</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
