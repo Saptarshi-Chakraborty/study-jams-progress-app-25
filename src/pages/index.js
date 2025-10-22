@@ -10,6 +10,8 @@ const HomePage = () => {
       <ol className=" list-decimal pl-5">
         <li><a target="_blank" className=" text-blue-500 underline" href="/leaderboard">Leaderboard</a></li>
         <li><a target="_blank" className=" text-blue-500 underline" href="/my-profile">My Profile</a></li>
+        <li><a target="_blank" className=" text-blue-500 underline" href="/login">Login</a></li>
+        <li><a target="_blank" className=" text-blue-500 underline" href="/admin/chapters">View All Chapters [Admin]</a></li>
       </ol>
 
       {/* Example Pages */}
