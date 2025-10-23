@@ -141,7 +141,7 @@ const BodyUploadReport = () => {
         }
     };
 
-    // Step 2: Upload participant data from CSV
+    // Step 2: Upload participant data from CSV with batch processing
     const uploadParticipantData = async (reportId, authToken, dataToUpload = null) => {
         const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
         const API = `${BASE_URL}/participants/upload-report`;
@@ -167,71 +167,98 @@ const BodyUploadReport = () => {
         });
 
         try {
-            for (let i = 0; i < dataSource.length; i++) {
-                const row = dataSource[i];
+            // Constants for batch processing
+            const BATCH_SIZE = 10; // Process 10 records in parallel
+            const REQUEST_LIMIT = 5; // Max 5 requests per second
+            const REQUEST_INTERVAL = 1000; // 1 second interval
 
-                const participantData = {
-                    report_id: reportId,
-                    name: row['User Name']?.trim() || '',
-                    email: row['User Email']?.trim().toLowerCase() || '',
-                    public_profile_url: row['Google Cloud Skills Boost Profile URL'] || '',
-                    public_profile_okay: row['Profile URL Status'] === 'All Good',
-                    access_code_redeemed: row['Access Code Redemption Status'] === 'Yes',
-                    all_labs_completed: row['All Skill Badges & Games Completed'] === 'Yes',
-                    no_of_skills_badges_completed: parseInt(row['# of Skill Badges Completed'] || 0, 10),
-                    name_of_skills_badges_completed: row['Names of Completed Skill Badges'] || '',
-                    no_of_arcade_games_completed: parseInt(row['# of Arcade Games Completed'] || 0, 10),
-                    name_of_arcade_games_completed: row['Names of Completed Arcade Games'] || '',
-                };
+            // Process data in batches
+            for (let i = 0; i < dataSource.length; i += BATCH_SIZE) {
+                const batch = dataSource.slice(i, i + BATCH_SIZE);
+                const batchPromises = batch.map((row, batchIndex) => {
+                    // Throttle requests to not exceed REQUEST_LIMIT per second
+                    const delay = Math.floor(batchIndex / REQUEST_LIMIT) * REQUEST_INTERVAL;
+                    
+                    return new Promise(resolve => setTimeout(async () => {
+                        const participantData = {
+                            report_id: reportId,
+                            name: row['User Name']?.trim() || '',
+                            email: row['User Email']?.trim().toLowerCase() || '',
+                            public_profile_url: row['Google Cloud Skills Boost Profile URL'] || '',
+                            public_profile_okay: row['Profile URL Status'] === 'All Good',
+                            access_code_redeemed: row['Access Code Redemption Status'] === 'Yes',
+                            all_labs_completed: row['All Skill Badges & Games Completed'] === 'Yes',
+                            no_of_skills_badges_completed: parseInt(row['# of Skill Badges Completed'] || 0, 10),
+                            name_of_skills_badges_completed: row['Names of Completed Skill Badges'] || '',
+                            no_of_arcade_games_completed: parseInt(row['# of Arcade Games Completed'] || 0, 10),
+                            name_of_arcade_games_completed: row['Names of Completed Arcade Games'] || '',
+                        };
 
-                // Update statistics
-                if (participantData.access_code_redeemed)
-                    stats.TOTAL_ACCESS_CODES_REDEEMED++;
-                if (participantData.all_labs_completed)
-                    stats.TOTAL_ALL_LABS_COMPLETED++;
-                if (participantData.no_of_skills_badges_completed >= 15)
-                    stats.TOTAL_SKILL_BADGES_COMPLETED++;
-                if (participantData.no_of_arcade_games_completed >= 1)
-                    stats.TOTAL_ARCADE_GAMES_COMPLETED++;
+                        // Update statistics
+                        if (participantData.access_code_redeemed)
+                            stats.TOTAL_ACCESS_CODES_REDEEMED++;
+                        if (participantData.all_labs_completed)
+                            stats.TOTAL_ALL_LABS_COMPLETED++;
+                        if (participantData.no_of_skills_badges_completed >= 15)
+                            stats.TOTAL_SKILL_BADGES_COMPLETED++;
+                        if (participantData.no_of_arcade_games_completed >= 1)
+                            stats.TOTAL_ARCADE_GAMES_COMPLETED++;
 
-                try {
-                    const params = {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authToken}`,
-                        },
-                        body: JSON.stringify(participantData),
-                    };
+                        try {
+                            const params = {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${authToken}`,
+                                },
+                                body: JSON.stringify(participantData),
+                            };
 
-                    const participantResponse = await fetch(API, params);
-                    const participantResult = await participantResponse.json();
+                            const participantResponse = await fetch(API, params);
+                            const participantResult = await participantResponse.json();
 
-                    if (participantResult.status === 'success') {
+                            if (participantResult.status === 'success') {
+                                resolve({ success: true, row });
+                            } else {
+                                console.error(`Failed to upload data for ${participantData.email}:`,
+                                    participantResult.message || await participantResponse.text());
+                                resolve({ 
+                                    success: false, 
+                                    row, 
+                                    errorMessage: participantResult.message || 'Unknown error' 
+                                });
+                            }
+                        } catch (uploadError) {
+                            console.error(`An error occurred while uploading data for ${participantData.email}:`, uploadError);
+                            resolve({ 
+                                success: false, 
+                                row, 
+                                errorMessage: uploadError.message || 'Network or server error' 
+                            });
+                        }
+                    }, delay));
+                });
+
+                // Wait for all promises in this batch to complete
+                const batchResults = await Promise.all(batchPromises);
+                
+                // Process results from this batch
+                batchResults.forEach(result => {
+                    if (result.success) {
                         successfulUploads++;
                     } else {
-                        console.error(`Failed to upload data for ${participantData.email}:`,
-                            participantResult.message || await participantResponse.text());
                         failedUploads++;
-                        // Store failed record with error message
                         newFailedRecords.push({
-                            ...row,
-                            errorMessage: participantResult.message || 'Unknown error'
+                            ...result.row,
+                            errorMessage: result.errorMessage
                         });
                     }
-                } catch (uploadError) {
-                    console.error(`An error occurred while uploading data for ${participantData.email}:`, uploadError);
-                    failedUploads++;
-                    // Store failed record with error message
-                    newFailedRecords.push({
-                        ...row,
-                        errorMessage: uploadError.message || 'Network or server error'
-                    });
-                }
-
+                });
+                
+                // Update progress after each batch
                 setUploadProgress({
                     phase: 'uploading',
-                    processed: i + 1,
+                    processed: Math.min(i + BATCH_SIZE, dataSource.length),
                     total: dataSource.length
                 });
             }
