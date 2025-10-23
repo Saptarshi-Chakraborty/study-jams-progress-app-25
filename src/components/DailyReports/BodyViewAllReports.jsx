@@ -1,0 +1,168 @@
+import React, { useState, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/router';
+import { Loader2, AlertTriangle, Upload, RefreshCw } from 'lucide-react';
+import BottomNavigation from '../shared/BottomNavigation';
+
+const BodyViewAllReports = () => {
+    const router = useRouter();
+    const [reports, setReports] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const fetchReports = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            setError('Authentication token not found. Please log in again.');
+            setLoading(false);
+            return;
+        }
+
+        const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+        const API = `${BASE_URL}/reports/view-all`;
+
+        try {
+            const response = await fetch(API, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to fetch reports.');
+            }
+
+            const result = await response.json();
+            // Sort reports by date in descending order
+            const sortedReports = result.data.sort((a, b) => new Date(b.report_date) - new Date(a.report_date));
+            setReports(sortedReports);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchReports();
+    }, [fetchReports]);
+
+    const renderContent = () => {
+        if (loading) {
+            return (
+                <div className="flex justify-center items-center h-64">
+                    <Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400" />
+                </div>
+            );
+        }
+
+        if (error) {
+            return (
+                <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4">
+                    <div className="flex">
+                        <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
+                        <div className="ml-3">
+                            <h3 className="text-sm font-medium text-red-800 dark:text-red-300">
+                                An error occurred
+                            </h3>
+                            <div className="mt-2 text-sm text-red-700 dark:text-red-300">
+                                <p>{error}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        if (reports.length === 0) {
+            return (
+                <div className="text-center py-16">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">No reports found</h3>
+                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Upload a report to see it here.</p>
+                </div>
+            );
+        }
+
+        return (
+            <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Report Date</th>
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Participants</th>
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Skill Badges</th>
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Arcade Games</th>
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">All Labs Done</th>
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Codes Redeemed</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Uploaded At</th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        {reports.map(report => (
+                            <tr key={report.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{new Date(report.report_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_participants}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_skill_badges_completed}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_arcade_game_completed}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_all_labs_completed}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_code_redeemed}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{new Date(report.uploaded_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    };
+
+    return (
+        <div className="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col">
+            <div className="max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto w-full h-full flex flex-col">
+                {/* Header */}
+                <header className="p-4 bg-gray-50 dark:bg-gray-900 shrink-0">
+                    <div className="flex items-center justify-center">
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 uppercase">Study Jams '25</h1>
+                    </div>
+                    <h2 className="text-lg font-bold text-center mt-1 text-gray-900 dark:text-gray-100">All Daily Reports</h2>
+                </header>
+
+                {/* Scrollable Section */}
+                <div className="flex-1 overflow-y-auto pb-20 scrollbar-hide">
+                    <main className="p-4 md:p-6 lg:p-8 xl:p-10">
+                        <div className="flex justify-end gap-4 mb-4">
+                            <button
+                                onClick={() => router.push('/daily_reports/upload')}
+                                className="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
+                            >
+                                <Upload className="h-5 w-5 mr-2" />
+                                Upload Report
+                            </button>
+                            <button
+                                onClick={fetchReports}
+                                disabled={loading}
+                                className="flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                                {loading ? (
+                                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                                ) : (
+                                    <RefreshCw className="h-5 w-5 mr-2" />
+                                )}
+                                {loading ? 'Refreshing...' : 'Refresh'}
+                            </button>
+                        </div>
+                        {renderContent()}
+                    </main>
+                </div>
+
+                {/* Footer Navigation */}
+                <BottomNavigation activeTab="reports" />
+            </div>
+        </div>
+    )
+}
+
+export default BodyViewAllReports

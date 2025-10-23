@@ -1,6 +1,7 @@
 "use client"
 
 import BodyLeaderboard from '@/components/Leaderboard/BodyLeaderboard'
+import { TopUserBar } from '@/components/shared/TopUserBar'
 import Head from 'next/head'
 
 const Leaderboard = () => {
@@ -11,6 +12,7 @@ const Leaderboard = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
+            <TopUserBar />
             <BodyLeaderboard />
         </>
     )

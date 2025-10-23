@@ -1,9 +1,12 @@
 "use client"
 
 import BodyViewAllChapters from '@/components/admin/chapters/BodyViewAllChapters'
+import AuthHOC from '@/components/shared/AuthHOC'
+import { TopUserBar } from '@/components/shared/TopUserBar'
+import { ROLES } from '@/context/GlobalContext'
 import Head from 'next/head'
 
-const Leaderboard = () => {
+const Chapters = () => {
     return (
         <>
             <Head>
@@ -11,9 +14,11 @@ const Leaderboard = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
+            <TopUserBar />
             <BodyViewAllChapters />
         </>
     )
 }
 
-export default Leaderboard
+// export default Chapters
+export default AuthHOC(Chapters, { role: ROLES.ADMIN })

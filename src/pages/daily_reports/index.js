@@ -1,6 +1,6 @@
 "use client"
 
-import BodyUploadReport from '@/components/DailyReports/UploadReport/BodyUploadReport'
+import BodyViewAllReports from '@/components/DailyReports/BodyViewAllReports'
 import { TopUserBar } from '@/components/shared/TopUserBar'
 import Head from 'next/head'
 
@@ -8,12 +8,12 @@ const UploadReport = () => {
     return (
         <>
             <Head>
-                <title>Upload Report | Study Jams Progress Tracker</title>
+                <title>View Daily Report | Study Jams Progress Tracker</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <TopUserBar />
-            <BodyUploadReport />
+            <BodyViewAllReports />
         </>
     )
 }
