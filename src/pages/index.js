@@ -1,5 +1,15 @@
 "use client"
 
+const NAVIGATIONS = [
+  { name: "Leaderboard", href: "/leaderboard" },
+  { name: "My Profile", href: "/my-profile" },
+  { name: "Login", href: "/login" },
+  { name: "View All Chapters [Admin]", href: "/admin/chapters" },
+  { name: "Upload Report [Organisers]", href: "/daily_reports/upload" },
+  // { name: "View All Reports [Organisers]", href: "/daily_reports/reports" },
+]
+
+
 const HomePage = () => {
   return (
     <div className="max-w-4xl p-4">
@@ -8,10 +18,12 @@ const HomePage = () => {
 
       <h2 className=" text-xl mt-4">Navigation</h2>
       <ol className=" list-decimal pl-5">
-        <li><a target="_blank" className=" text-blue-500 underline" href="/leaderboard">Leaderboard</a></li>
-        <li><a target="_blank" className=" text-blue-500 underline" href="/my-profile">My Profile</a></li>
-        <li><a target="_blank" className=" text-blue-500 underline" href="/login">Login</a></li>
-        <li><a target="_blank" className=" text-blue-500 underline" href="/admin/chapters">View All Chapters [Admin]</a></li>
+        {NAVIGATIONS.map((nav) => (
+          <li key={nav.name}><a target="_blank" className=" text-blue-500 underline" href={nav.href}>{nav.name}</a></li>
+        ))}
+        {/*         
+        <li><a target="_blank" className=" text-blue-500 underline" href="/leaderboard">Leaderboard</a></li> */}
+
       </ol>
 
       {/* Example Pages */}

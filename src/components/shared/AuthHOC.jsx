@@ -1,54 +1,72 @@
+// /components/AuthHOC.js (or wherever you store it)
+
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useGlobalContext, Role, ROLES } from '@/context/GlobalContext';
-import LoadingPage from './LoadingPage';
-
+import { useGlobalContext, ROLES } from '@/context/GlobalContext';
+import LoadingPage from './Loading'; 
 
 const AuthHOC = (
     WrappedComponent,
-    options = {}
+    options = {} // e.g., { role: 'admin' } or { role: ['admin', 'organiser'] }
 ) => {
     const AuthComponent = (props) => {
         const { user, isCheckingAuth } = useGlobalContext();
         const router = useRouter();
 
         useEffect(() => {
+            // First, we wait for the initial authentication check to complete.
             if (isCheckingAuth) {
-                return; // Wait until authentication check is complete
+                return;
             }
 
-            // 1. Redirect unauthenticated users to login
+            // Get the roles required to access this page.
+            const requiredRoles = options.role ? (Array.isArray(options.role) ? options.role : [options.role]) : [];
+
+            // This page requires the user to be logged in.
             if (!user) {
                 router.replace('/login');
                 return;
             }
 
-            // 2. Handle role-based authorization
-            const userRoles = user.labels || [];
-            const requiredRoles = options.role ? (Array.isArray(options.role) ? options.role : [options.role]) : [];
-
+            // This page has specific role requirements.
             if (requiredRoles.length > 0) {
-                // Admins can access any role-protected page
-                if (userRoles.includes(ROLES.ADMIN)) {
+                // IMPORTANT: I'm assuming your user object has a `role` property.
+                // If it's called something else (e.g., user.labels), change it here.
+                const userRole = user.role;
+
+                // An admin can access any page, so we let them through immediately.
+                if (userRole === ROLES.ADMIN) {
                     return;
                 }
 
-                const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role));
+                // Check if the user has at least one of the required roles.
+                const hasRequiredRole = requiredRoles.includes(userRole);
 
                 if (!hasRequiredRole) {
-                    // Redirect if user doesn't have the required role
-                    // You can redirect to a dedicated "unauthorized" page or the dashboard
-                    router.replace('/dashboard');
+                    // If the user does not have the required role, redirect them.
+                    // A profile page is a good, safe place to send them.
+                    router.replace('/my-profile');
                 }
             }
-        }, [user, isCheckingAuth, router]);
+        }, [user, isCheckingAuth, router, options.role]);
 
-        // While checking or if redirecting, show a loading state
-        if (isCheckingAuth || !user) {
-            return <LoadingPage />; // Or a spinner component
+
+        // --- Render Logic ---
+
+        // 1. If we are still checking for auth, always show the loading page.
+        if (isCheckingAuth) {
+            return <LoadingPage />;
         }
 
-        // If authenticated and authorized, render the component
+        // 2. If the auth check is done and there is no user, a redirect is
+        //    about to happen, so we show the loading page to prevent flashing
+        //    the protected content for a split second.
+        if (!user) {
+            return <LoadingPage />;
+        }
+
+        // 3. If we get here, the user is authenticated and authorized.
+        //    Render the actual page component.
         return <WrappedComponent {...props} />;
     };
 

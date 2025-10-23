@@ -1,5 +1,5 @@
-// /context/GlobalContext.tsx
-import { account } from "@/lib/appwrite";
+// /context/GlobalContext.jsx
+
 import {
     createContext,
     useCallback,
@@ -7,6 +7,10 @@ import {
     useEffect,
     useState
 } from "react";
+import { useRouter } from "next/router";
+
+// It's good practice to keep constants like this in a separate config file
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export const ROLES = {
     ADMIN: "admin",
@@ -17,32 +21,63 @@ export const ROLES = {
 
 const GlobalContext = createContext(undefined);
 
-
 export function GlobalContextProvider({
     children,
 }) {
     const [user, setUser] = useState(null);
-    const [session, setSession] = useState(null);
-    const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Start with true
+    // We don't need the 'session' state from your original file for this flow
+    // const [session, setSession] = useState(null); 
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+    const router = useRouter();
+
+    const logout = useCallback(() => {
+        setUser(null);
+        localStorage.removeItem("authToken");
+        router.push("/login");
+    }, [router]);
 
     const checkAuth = useCallback(async () => {
-        // Skip if we're already checking
-
         setIsCheckingAuth(true);
         try {
-            const currentUser = await account.get();
-            setUser(currentUser);
-        } catch (error) {
-            // Clear user if unauthorized or any other error
-            setUser(null);
-            // Don't log error for unauthorized requests
-            if (error.code !== 401) {
-                console.error("Auth check error:", error);
+            const token = localStorage.getItem("authToken");
+
+            // If no token is found, there's no user.
+            if (!token) {
+                setUser(null);
+                setIsCheckingAuth(false);
+                return;
             }
+
+            // We have a token, let's verify it with the backend
+            const response = await fetch(`${BASE_URL}/auth/me`, {
+                method: "POST", // As you specified
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+                if (userData.status === "success" && userData.user)
+                    setUser(userData.user);
+                else
+                    setUser(null);
+
+            } else {
+                // The token was invalid (e.g., expired)
+                // so we clear the user and the token.
+                logout();
+            }
+
+        } catch (error) {
+            // This could happen if the backend is down
+            console.error("Auth check error:", error);
+            setUser(null);
         } finally {
             setIsCheckingAuth(false);
         }
-    }, []); // Correct: Dependency array is empty
+    }, [logout]); // Added logout as a dependency
 
     useEffect(() => {
         checkAuth();
@@ -53,10 +88,9 @@ export function GlobalContextProvider({
             value={{
                 user,
                 setUser,
-                session,
-                setSession,
                 checkAuth,
                 isCheckingAuth,
+                logout, // Provide the logout function to the rest of the app
             }}
         >
             {children}

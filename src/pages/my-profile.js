@@ -1,6 +1,7 @@
 "use client"
 
 import BodyMyProfile from '@/components/MyProfile/BodyMyProfile'
+import AuthHOC from '@/components/shared/AuthHOC'
 import Head from 'next/head'
 
 const MyProfile = () => {
@@ -16,4 +17,5 @@ const MyProfile = () => {
     )
 }
 
-export default MyProfile
+// export default MyProfile
+export default AuthHOC(MyProfile)
