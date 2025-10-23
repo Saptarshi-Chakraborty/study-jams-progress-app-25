@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, Edit, Trash2, Eye, RefreshCw, Search, ChevronLeft, ChevronRight } from 'lucide-react';

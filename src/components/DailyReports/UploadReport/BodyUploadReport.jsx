@@ -199,7 +199,7 @@ const BodyUploadReport = () => {
                             stats.TOTAL_ACCESS_CODES_REDEEMED++;
                         if (participantData.all_labs_completed)
                             stats.TOTAL_ALL_LABS_COMPLETED++;
-                        if (participantData.no_of_skills_badges_completed >= 15)
+                        if (participantData.no_of_skills_badges_completed >= 19)
                             stats.TOTAL_SKILL_BADGES_COMPLETED++;
                         if (participantData.no_of_arcade_games_completed >= 1)
                             stats.TOTAL_ARCADE_GAMES_COMPLETED++;

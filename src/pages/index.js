@@ -5,6 +5,7 @@ const NAVIGATIONS = [
   { name: "My Profile", href: "/my-profile" },
   { name: "Login", href: "/login" },
   { name: "View All Chapters [Admin]", href: "/admin/chapters" },
+  { name: "View All Users [Admin]", href: "/admin/users" },
   { name: "Upload Report [Organisers]", href: "/daily_reports/upload" },
   // { name: "View All Reports [Organisers]", href: "/daily_reports/reports" },
 ]

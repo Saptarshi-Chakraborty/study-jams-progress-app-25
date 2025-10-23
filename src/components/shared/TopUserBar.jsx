@@ -1,4 +1,4 @@
-import { Home, UploadCloud, BarChart2, User, Building2Icon } from 'lucide-react';
+import { Home, UploadCloud, BarChart2, User, Building2Icon, ShieldUser, Users, FileChartColumnIncreasing, ChartNoAxesCombined } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useGlobalContext, ROLES } from '../../context/GlobalContext';
@@ -13,11 +13,13 @@ export const TopUserBar = () => {
     }
 
     const navItems = [
-        { name: 'Home', icon: Home, href: '/my-profile' }, // All admin-level roles
+        // { name: 'Home', icon: Home, href: '/my-profile' }, // All admin-level roles
         { name: 'Upload', icon: UploadCloud, href: '/daily_reports/upload', roles: [ROLES.ADMIN, ROLES.FACILITATOR] },
-        { name: 'Reports', icon: BarChart2, href: '/daily_reports', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
-        { name: 'Participants', icon: User, href: '/participants', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
+        { name: 'Reports', icon: FileChartColumnIncreasing, href: '/daily_reports', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
+        { name: 'Individual Reports', icon: ChartNoAxesCombined, href: '/individual-reports', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
+        // { name: 'My Participants', icon: Users, href: '/participants', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
         { name: 'Chapters', icon: Building2Icon, href: '/admin/chapters', roles: [ROLES.ADMIN] },
+        { name: 'Users', icon: ShieldUser, href: '/admin/users', roles: [ROLES.ADMIN] },
     ];
 
     return (

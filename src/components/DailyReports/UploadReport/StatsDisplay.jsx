@@ -9,7 +9,7 @@ const StatsDisplay = ({ stats, date }) => {
     return (
         <div className="mb-6">
             <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-4 text-center">
-                Report Statistics for {new Date(date).toLocaleDateString()}
+                Report Statistics for {new Date(date)?.toLocaleDateString()}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
