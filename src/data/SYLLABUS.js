@@ -91,7 +91,7 @@ export const SKILL_BADGES = [
     },
     {
         id: 19,
-        name: 'Develop GenAI Apps with Gemini and Streamlit',
+        name: 'Develop Gen AI Apps with Gemini and Streamlit',
         url: 'https://www.cloudskillsboost.google/course_templates/978'
     },
 ]

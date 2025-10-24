@@ -1,16 +1,25 @@
+"use client"
+
 import React, { useState, useEffect, useMemo } from 'react'
 import { Trophy, FlaskConical, Users, ExternalLink, Loader2, Award, Gamepad2, CheckCircle2, XCircle, LogOut } from 'lucide-react'
+// import Confetti from 'react-confetti'; // Removed for dynamic import
 import { PROFILE_DATA } from './data'
 import BottomNavigation from '../shared/BottomNavigation'
 import { SKILL_BADGES as skillBadges, ARCADE_GAMES as arcadeGames } from '../../data/SYLLABUS'
 import ActivityFeedSection from './ActivityFeedSection'
 import { useGlobalContext } from '../../context/GlobalContext'
 
+// The useWindowSize hook is no longer needed here as we'll get dimensions on demand.
+
 const BodyMyProfile = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { logout } = useGlobalContext();
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [recycleConfetti, setRecycleConfetti] = useState(true);
+  const [ConfettiComponent, setConfettiComponent] = useState(null);
+  const [confettiProps, setConfettiProps] = useState({ width: 0, height: 0 });
 
   const completedSkillBadges = useMemo(() => {
     if (!profileData?.latest_report?.name_of_skill_badges_completed) return [];
@@ -32,10 +41,9 @@ const BodyMyProfile = () => {
     if (!profileData) return null;
 
     const report = profileData.latest_report;
-    if (report.last_lab_completed_date) {
-      // current date
-      const currentDate = new Date();
-      return new Date(report.last_lab_completed_date ).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+
+    if (report.last_lab_completed_date) { 
+      return new Date(report.last_lab_completed_date ).toLocaleString('en-US', { dateStyle: 'long' });
     }
 
     if (report.no_of_skill_badges_completed === 0 && report.no_of_arcade_games_completed === 0) {
@@ -91,6 +99,28 @@ const BodyMyProfile = () => {
     fetchProfile();
   }, []);
 
+  useEffect(() => {
+    const syllabusCompleted = profileData?.latest_report?.no_of_skill_badges_completed >= 19 && profileData?.latest_report?.no_of_arcade_games_completed >= 1;
+    
+    if (syllabusCompleted) {
+      if (!ConfettiComponent) {
+        import('react-confetti').then(module => {
+          const Confetti = module.default;
+          setConfettiComponent(() => Confetti); // Store component in state
+          setConfettiProps({ width: window.innerWidth, height: window.innerHeight });
+        });
+      }
+
+      setShowConfetti(true);
+      setRecycleConfetti(true);
+      const timer = setTimeout(() => {
+          setRecycleConfetti(false);
+      }, 5000); // Stop recycling after 5 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [profileData, ConfettiComponent]);
+
   const getActivityIcon = (iconName) => {
     const iconMap = {
       'emoji_events': Trophy,
@@ -109,6 +139,13 @@ const BodyMyProfile = () => {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col">
+      {showConfetti && ConfettiComponent && (
+        <ConfettiComponent
+          {...confettiProps}
+          recycle={recycleConfetti}
+          onConfettiComplete={() => setShowConfetti(false)}
+        />
+      )}
       <div className="max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto w-full h-full flex flex-col">
         {/* Header */}
         <header className="p-4 bg-gray-50 dark:bg-gray-900 flex-shrink-0">
@@ -220,6 +257,21 @@ const BodyMyProfile = () => {
                     </div>
                   </div>
                 </section>
+
+                {/* Syllabus Completion Banner */}
+                {profileData.latest_report.no_of_skill_badges_completed >= 19 && profileData.latest_report.no_of_arcade_games_completed >= 1 && (
+                  <section className="mt-8">
+                    <div className="p-4 rounded-xl bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white shadow-lg">
+                      <div className="flex items-center">
+                        <Trophy className="h-10 w-10 mr-4 flex-shrink-0" />
+                        <div>
+                          <h3 className="font-bold text-xl">Congratulations!</h3>
+                          <p className="text-sm">You have completed the whole syllabus of Study Jams '25.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                )}
 
                 {/* Badge Status Section */}
                 <section className="mt-8">

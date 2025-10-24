@@ -4,7 +4,7 @@ import BodyLeaderboard from '@/components/Leaderboard/BodyLeaderboard'
 import { TopUserBar } from '@/components/shared/TopUserBar'
 import Head from 'next/head'
 
-const Leaderboard = ({ initialLeaderboardData }) => {
+const Leaderboard = ({ initialLeaderboardData, reportDate }) => {
     return (
         <>
             <Head>
@@ -13,7 +13,7 @@ const Leaderboard = ({ initialLeaderboardData }) => {
             </Head>
 
             <TopUserBar />
-            <BodyLeaderboard initialData={initialLeaderboardData} />
+            <BodyLeaderboard initialData={initialLeaderboardData} reportDate={reportDate} />
         </>
     )
 }
@@ -35,7 +35,8 @@ export async function getStaticProps() {
 
         return {
             props: {
-                initialLeaderboardData: result.status === 'success' ? result.data : []
+                initialLeaderboardData: result.status === 'success' ? result.data : [],
+                reportDate: result.status === 'success' ? result.reportDate : null
             }
             // Remove the revalidate option for static export
         };
@@ -43,7 +44,8 @@ export async function getStaticProps() {
         console.error("Failed to fetch leaderboard data:", error);
         return {
             props: {
-                initialLeaderboardData: []
+                initialLeaderboardData: [],
+                reportDate: null
             }
         };
     }

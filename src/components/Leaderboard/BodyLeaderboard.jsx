@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import BottomNavigation from '../shared/BottomNavigation'
 
-const BodyLeaderboard = ({ initialData = [] }) => {
+const BodyLeaderboard = ({ initialData = [], reportDate = null }) => {
     const [searchQuery, setSearchQuery] = useState('')
 
     const filteredLeaderboard = initialData.filter(participant =>
@@ -36,6 +36,11 @@ const BodyLeaderboard = ({ initialData = [] }) => {
 
                 {/* Search Bar */}
                 <div className="px-4 pb-2 pt-2 bg-gray-50 dark:bg-gray-900">
+                    {reportDate && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400 pb-2">
+                            Last Updated: <span className="font-bold text-sm text-black dark:text-white">{new Date(reportDate).toLocaleString('en-US', { dateStyle: 'full' })}</span>
+                        </p>
+                    )}
                     <input
                         type="text"
                         placeholder="> search by name..."
