@@ -36,8 +36,8 @@ export async function getStaticProps() {
         return {
             props: {
                 initialLeaderboardData: result.status === 'success' ? result.data : []
-            },
-            revalidate: 3600 // Revalidate every hour (ISR)
+            }
+            // Remove the revalidate option for static export
         };
     } catch (error) {
         console.error("Failed to fetch leaderboard data:", error);

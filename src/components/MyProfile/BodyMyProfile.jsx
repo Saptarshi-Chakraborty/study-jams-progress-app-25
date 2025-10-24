@@ -33,7 +33,7 @@ const BodyMyProfile = () => {
     if (report.last_lab_completed_date) {
       // current date
       const currentDate = new Date();
-      return new Date(report.last_lab_completed_date || currentDate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      return new Date(report.last_lab_completed_date ).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
     }
 
     if (report.no_of_skill_badges_completed === 0 && report.no_of_arcade_games_completed === 0) {
@@ -72,7 +72,13 @@ const BodyMyProfile = () => {
         }
 
         const result = await response.json();
-        setProfileData(result.data);
+        
+        // Check if data exists
+        if (!result.data || !result.data.latest_report) {
+          setProfileData(null);
+        } else {
+          setProfileData(result.data);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -115,6 +121,16 @@ const BodyMyProfile = () => {
             ) : error ? (
               <div className="text-center text-red-500">
                 <p>Error: {error}</p>
+              </div>
+            ) : !profileData || !profileData.latest_report ? (
+              <div className="flex flex-col items-center justify-center h-full text-center p-6">
+                <XCircle className="h-16 w-16 text-gray-400 dark:text-gray-600 mb-4" />
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  No Profile Data Available
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 max-w-md">
+                  You don't have any profile data yet. This could be because you are not registered as a participant or your data hasn't been synced yet.
+                </p>
               </div>
             ) : profileData && (
               <>
