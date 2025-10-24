@@ -1,7 +1,8 @@
 "use client"
 
 const NAVIGATIONS = [
-  { name: "Leaderboard", href: "/leaderboard" },
+  { name: "All Pages", href: "/routes" },
+  { name: "Leaderboard", href: "/" },
   { name: "My Profile", href: "/my-profile" },
   { name: "Login", href: "/login" },
   { name: "View All Chapters [Admin]", href: "/admin/chapters" },
