@@ -1,9 +1,86 @@
-import React from 'react'
-import { Trophy, FlaskConical, Users } from 'lucide-react'
+import React, { useState, useEffect, useMemo } from 'react'
+import { Trophy, FlaskConical, Users, ExternalLink, Loader2, Award, Gamepad2, CheckCircle2, XCircle } from 'lucide-react'
 import { PROFILE_DATA } from './data'
 import BottomNavigation from '../shared/BottomNavigation'
+import { SKILL_BADGES as skillBadges, ARCADE_GAMES as arcadeGames } from '../../data/SYLLABUS'
+import ActivityFeedSection from './ActivityFeedSection'
 
 const BodyMyProfile = () => {
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const completedSkillBadges = useMemo(() => {
+    if (!profileData?.latest_report?.name_of_skill_badges_completed) return [];
+    return profileData.latest_report.name_of_skill_badges_completed
+      .split('|')
+      .map(name => name.replace('[Skill Badge]', '').trim())
+      .filter(Boolean);
+  }, [profileData]);
+
+  const completedArcadeGames = useMemo(() => {
+    if (!profileData?.latest_report?.name_of_arcade_games_completed) return [];
+    return profileData.latest_report.name_of_arcade_games_completed
+      .split('|')
+      .map(name => name.replace('[Arcade Game]', '').trim())
+      .filter(Boolean);
+  }, [profileData]);
+
+  const lastLabCompletionContent = useMemo(() => {
+    if (!profileData) return null;
+
+    const report = profileData.latest_report;
+    if (report.last_lab_completed_date) {
+      return new Date(report.last_lab_completed_date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+    }
+
+    if (report.no_of_skill_badges_completed === 0 && report.no_of_arcade_games_completed === 0) {
+      return <span className="text-red-500">No Badges Earned</span>;
+    }
+
+    return `Before ${new Date(report.report_date).toLocaleString('en-US', { dateStyle: 'medium' })}`;
+  }, [profileData]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      setError(null);
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        setError('Authentication token not found. Please log in again.');
+        setLoading(false);
+        return;
+      }
+
+      const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+      const API = `${BASE_URL}/my-progress`;
+
+      try {
+        const response = await fetch(API, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch profile data.');
+        }
+
+        const result = await response.json();
+        setProfileData(result.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   const getActivityIcon = (iconName) => {
     const iconMap = {
       'emoji_events': Trophy,
@@ -29,106 +106,131 @@ const BodyMyProfile = () => {
         <div className="flex-1 overflow-y-auto pb-20 scrollbar-hide">
           {/* Main Content */}
           <main className="p-4 md:p-6 lg:p-8 xl:p-10">
-            {/* Profile Header */}
-            <div className="flex flex-col items-center gap-6">
-              <div className="flex flex-col items-center gap-4">
-                <div className="relative">
-                  <img
-                    alt={`${PROFILE_DATA.name}'s profile picture`}
-                    className="h-32 w-32 rounded-full object-cover"
-                    src={PROFILE_DATA.image}
-                  />
-                  <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-bold">
-                    #{PROFILE_DATA.rank}
+            {loading ? (
+              <div className="flex justify-center items-center h-full">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+              </div>
+            ) : error ? (
+              <div className="text-center text-red-500">
+                <p>Error: {error}</p>
+              </div>
+            ) : profileData && (
+              <>
+                {/* Profile Header */}
+                <div className="flex flex-col items-center gap-6">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="relative">
+                      <img
+                        alt={`${profileData.latest_report.name}'s profile picture`}
+                        className="h-32 w-32 rounded-full object-cover"
+                        src={PROFILE_DATA.image}
+                      />
+                      {/* Leaderboard Rank */}
+                      {/* <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-bold">
+                        #{PROFILE_DATA.rank}
+                      </div> */}
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                        {profileData.latest_report.name}
+                      </p>
+                      <p className="text-base text-gray-500 dark:text-gray-400">
+                        {profileData.latest_report.email}
+                      </p>
+                      {profileData.latest_report.skill_boost_url && (
+                        <a
+                          href={profileData.latest_report.skill_boost_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          My Public Profile <ExternalLink className="ml-1 h-4 w-4" />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {PROFILE_DATA.name}
-                  </p>
-                  <p className="text-base text-gray-500 dark:text-gray-400">
-                    {PROFILE_DATA.title}
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            {/* Skills Section */}
-            <section className="mt-8">
-              <h2 className="px-2 pb-2 text-lg font-bold text-gray-900 dark:text-white">
-                Skills
-              </h2>
-              <div className="flex flex-wrap gap-2 p-2">
-                {PROFILE_DATA.skills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="cursor-pointer rounded-full bg-blue-600/10 px-4 py-2 text-sm font-medium text-blue-600 dark:bg-blue-600/20"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </section>
 
-            {/* Progress Section */}
-            <section className="mt-6">
-              <h2 className="px-2 pb-2 text-lg font-bold text-gray-900 dark:text-white">
-                Progress
-              </h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Quests Completed
-                  </p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {PROFILE_DATA.progress.questsCompleted}
-                  </p>
-                </div>
-                <div className="rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Labs Finished
-                  </p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {PROFILE_DATA.progress.labsFinished}
-                  </p>
-                </div>
-                <div className="col-span-2 rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Last Lab Completion
-                  </p>
-                  <p className="text-xl font-bold text-gray-900 dark:text-white">
-                    {PROFILE_DATA.progress.lastLabCompletion}
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* Activity Feed Section */}
-            <section className="mt-8">
-              <h2 className="px-2 pb-2 text-lg font-bold text-gray-900 dark:text-white">
-                Activity Feed
-              </h2>
-              <div className="relative flex flex-col pl-6">
-                <div className="absolute left-0 top-0 h-full w-0.5 bg-gray-200 dark:bg-gray-700"></div>
-                {PROFILE_DATA.activityFeed.map((activity, index) => (
-                  <div key={index} className="relative flex items-start gap-4 pb-8">
-                    <div className="absolute left-0 top-3 -ml-[11.5px] flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-900">
-                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-white">
-                        {getActivityIcon(activity.icon)}
+                {/* Progress Section */}
+                <section className="mt-6">
+                  <h2 className="px-2 pb-2 text-lg font-bold text-gray-900 dark:text-white">
+                    <span className="text-gray-500 dark:text-gray-400 text-medium text-base">Updated On: </span>{new Date(profileData.latest_report.report_date).toLocaleString('en-US', { dateStyle: 'medium' })}
+                  </h2>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50 text-center">
+                      <div className="flex items-center justify-center text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <Award className="h-4 w-4 mr-2 sm:block hidden text-blue-500" />
+                        <span>Skill Badges Completed</span>
                       </div>
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-800 dark:text-gray-200">
-                        {activity.title}
+                      <p className="text-3xl font-bold text-blue-500">
+                        {profileData.latest_report.no_of_skill_badges_completed}
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {activity.date}
+                    </div>
+                    <div className="rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50 text-center">
+                      <div className="flex items-center justify-center text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <Gamepad2 className="h-4 w-4 mr-2 sm:block hidden text-purple-500" />
+                        <span>Arcade Games Completed</span>
+                      </div>
+                      <p className="text-3xl font-bold text-purple-500">
+                        {profileData.latest_report.no_of_arcade_games_completed}
+                      </p>
+                    </div>
+                    <div className="col-span-2 rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                        Last Lab Completion
+                      </p>
+                      <p className="text-xl font-bold text-gray-900 dark:text-white">
+                        {lastLabCompletionContent}
                       </p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </section>
+                </section>
+
+                {/* Badge Status Section */}
+                <section className="mt-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h3 className="px-2 pb-2 text-lg font-bold text-blue-500">Skill Badges Status</h3>
+                      <ul className="space-y-2">
+                        {skillBadges.map(badge => (
+                          <li key={badge.id}>
+                            <a href={badge.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800/50 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                              <span className="text-sm text-gray-800 dark:text-gray-300">{badge.name}</span>
+                              {completedSkillBadges.includes(badge.name) ? (
+                                <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-green-500" title="Completed" />
+                              ) : (
+                                <XCircle className="h-5 w-5 flex-shrink-0 text-red-500" title="Not Completed" />
+                              )}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="px-2 pb-2 text-lg font-bold text-purple-500">Arcade Games Status</h3>
+                      <ul className="space-y-2">
+                        {arcadeGames.map(game => (
+                          <li key={game.id}>
+                            <a href={game.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800/50 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                              <span className="text-sm text-gray-800 dark:text-gray-300">{game.name}</span>
+                              {completedArcadeGames.includes(game.name) ? (
+                                <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-green-500" title="Completed" />
+                              ) : (
+                                <XCircle className="h-5 w-5 flex-shrink-0 text-red-500" title="Not Completed" />
+                              )}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Activity Feed Section: HIDE TEMPORARILY */}
+                {/* <ActivityFeedSection /> */}
+              </>
+            )}
           </main>
         </div>
 

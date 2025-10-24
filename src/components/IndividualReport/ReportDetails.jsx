@@ -31,7 +31,7 @@ const ReportDetails = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg text-center">
                             <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Skill Badges Completed</p>
-                            <p className="text-4xl font-bold text-green-500 mt-2">{selectedParticipant.no_of_skill_badges_completed}</p>
+                            <p className="text-4xl font-bold text-blue-500 mt-2">{selectedParticipant.no_of_skill_badges_completed}</p>
                         </div>
                         <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg text-center">
                             <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Arcade Games Completed</p>
@@ -41,7 +41,7 @@ const ReportDetails = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
-                            <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Skill Badges Status</h3>
+                            <h3 className="text-xl font-semibold mb-4 text-blue-500">Skill Badges Status</h3>
                             <ul className="space-y-3">
                                 {skillBadges.map(badge => (
                                     <li key={badge.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">
@@ -56,7 +56,7 @@ const ReportDetails = () => {
                             </ul>
                         </div>
                         <div>
-                            <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Arcade Games Status</h3>
+                            <h3 className="text-xl font-semibold mb-4 text-purple-500">Arcade Games Status</h3>
                             <ul className="space-y-3">
                                 {arcadeGames.map(game => (
                                     <li key={game.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">

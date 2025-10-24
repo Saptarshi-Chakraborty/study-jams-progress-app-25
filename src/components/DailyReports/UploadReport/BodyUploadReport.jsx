@@ -142,7 +142,7 @@ const BodyUploadReport = () => {
     };
 
     // Step 2: Upload participant data from CSV with batch processing
-    const uploadParticipantData = async (reportId, authToken, dataToUpload = null) => {
+    const uploadParticipantData = async (reportId, authToken, reportDate, dataToUpload = null) => {
         const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
         const API = `${BASE_URL}/participants/upload-report`;
 
@@ -182,6 +182,7 @@ const BodyUploadReport = () => {
                     return new Promise(resolve => setTimeout(async () => {
                         const participantData = {
                             report_id: reportId,
+                            report_date: reportDate,
                             name: row['User Name']?.trim() || '',
                             email: row['User Email']?.trim().toLowerCase() || '',
                             public_profile_url: row['Google Cloud Skills Boost Profile URL'] || '',
@@ -287,7 +288,7 @@ const BodyUploadReport = () => {
     };
 
     // Step 3: Update report statistics
-    const updateReportStats = async (reportId, stats, authToken) => {
+    const updateReportStats = async (reportId, stats, authToken, reportDate) => {
         const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
         const API = `${BASE_URL}/reports/update-stats`;
 
@@ -301,6 +302,7 @@ const BodyUploadReport = () => {
                 total_arcade_games_completed: stats.TOTAL_ARCADE_GAMES_COMPLETED,
                 total_all_labs_completed: stats.TOTAL_ALL_LABS_COMPLETED,
                 total_access_codes_redeemed: stats.TOTAL_ACCESS_CODES_REDEEMED,
+                report_date: reportDate,
             };
 
             const params = {
@@ -360,13 +362,13 @@ const BodyUploadReport = () => {
 
             // Step 2: Upload participant data
             const { stats, successfulUploads, failedUploads } =
-                await uploadParticipantData(reportId, authToken);
+                await uploadParticipantData(reportId, authToken, reportDate);
 
             // Store the combined stats for potential retries
             setCombinedStats(stats);
 
             // Step 3: Update report statistics
-            await updateReportStats(reportId, stats, authToken);
+            await updateReportStats(reportId, stats, authToken, reportDate);
 
             // Set upload as complete to display stats
             setIsUploadComplete(true);
@@ -408,7 +410,7 @@ const BodyUploadReport = () => {
         try {
             // Use the original report ID instead of creating a new one
             const { stats: retryStats, successfulUploads, failedUploads } =
-                await uploadParticipantData(originalReportId, authToken, failedRecords);
+                await uploadParticipantData(originalReportId, authToken, reportDate, failedRecords);
 
             // Combine original stats with retry stats
             const updatedStats = {

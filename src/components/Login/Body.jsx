@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
@@ -97,6 +99,7 @@ const BodyLogin = () => {
       if (response.ok && data.status === 'success' && data.authToken) {
         localStorage.setItem('authToken', data.authToken)
         router.push('/my-profile')
+        window.location.replace('/my-profile') // Fallback for navigation
       } else {
         if (data.error === "already-used") {
           setError("This OTP has already been used. Please request a new one.");
