@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router';
-import { Loader2, AlertTriangle, Upload, RefreshCw } from 'lucide-react';
+import { Loader2, AlertTriangle, Upload, RefreshCw, Trash2 } from 'lucide-react';
 import BottomNavigation from '../shared/BottomNavigation';
 
 const BodyViewAllReports = () => {
@@ -8,6 +8,9 @@ const BodyViewAllReports = () => {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const [reportToDelete, setReportToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchReports = useCallback(async () => {
         setLoading(true);
@@ -50,6 +53,50 @@ const BodyViewAllReports = () => {
     useEffect(() => {
         fetchReports();
     }, [fetchReports]);
+
+    const handleDeleteClick = (reportId) => {
+        setReportToDelete(reportId);
+        setShowConfirmDialog(true);
+    };
+
+    const cancelDelete = () => {
+        setShowConfirmDialog(false);
+        setReportToDelete(null);
+    };
+
+    const confirmDelete = async () => {
+        if (!reportToDelete) return;
+        setIsDeleting(true);
+        setError(null);
+
+        const authToken = localStorage.getItem('authToken');
+        const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+        const API = `${BASE_URL}/reports/delete`;
+
+        try {
+            const response = await fetch(API, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ report_id: reportToDelete }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete report.');
+            }
+
+            setReports(reports.filter(report => report.id !== reportToDelete));
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsDeleting(false);
+            setShowConfirmDialog(false);
+            setReportToDelete(null);
+        }
+    };
 
     const renderContent = () => {
         if (loading) {
@@ -99,6 +146,9 @@ const BodyViewAllReports = () => {
                             <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">All Labs Done</th>
                             <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Codes Redeemed</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Uploaded At</th>
+                            <th scope="col" className="relative px-6 py-3">
+                                <span className="sr-only">Actions</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -111,6 +161,12 @@ const BodyViewAllReports = () => {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_all_labs_completed}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_code_redeemed}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{new Date(report.uploaded_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button onClick={() => handleDeleteClick(report.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                        <span className="sr-only">Delete report</span>
+                                        <Trash2 className="h-5 w-5" />
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -161,6 +217,42 @@ const BodyViewAllReports = () => {
                 {/* Footer Navigation */}
                 <BottomNavigation activeTab="reports" />
             </div>
+
+            {showConfirmDialog && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm w-full m-4">
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100" id="modal-title">Confirm Deletion</h3>
+                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                            Are you sure you want to delete this report? This will also delete all individual participant records associated with it. This action cannot be undone.
+                        </p>
+                        <div className="mt-5 sm:mt-6 flex justify-end space-x-3">
+                            <button
+                                type="button"
+                                disabled={isDeleting}
+                                onClick={cancelDelete}
+                                className="inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                disabled={isDeleting}
+                                onClick={confirmDelete}
+                                className="inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isDeleting ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    'Delete'
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
