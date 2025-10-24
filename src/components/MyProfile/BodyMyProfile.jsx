@@ -31,7 +31,9 @@ const BodyMyProfile = () => {
 
     const report = profileData.latest_report;
     if (report.last_lab_completed_date) {
-      return new Date(report.last_lab_completed_date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      // current date
+      const currentDate = new Date();
+      return new Date(report.last_lab_completed_date || currentDate).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
     }
 
     if (report.no_of_skill_badges_completed === 0 && report.no_of_arcade_games_completed === 0) {
