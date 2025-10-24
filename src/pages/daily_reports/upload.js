@@ -1,7 +1,9 @@
 "use client"
 
 import BodyUploadReport from '@/components/DailyReports/UploadReport/BodyUploadReport'
+import AuthHOC from '@/components/shared/AuthHOC'
 import { TopUserBar } from '@/components/shared/TopUserBar'
+import { ROLES } from '@/context/GlobalContext'
 import Head from 'next/head'
 
 const UploadReport = () => {
@@ -18,4 +20,4 @@ const UploadReport = () => {
     )
 }
 
-export default UploadReport
+export default AuthHOC(UploadReport, { role: [ROLES.ADMIN, ROLES.ORGANISER] })

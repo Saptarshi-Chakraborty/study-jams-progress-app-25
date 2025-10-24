@@ -1,6 +1,7 @@
 "use client"
 
 import BodyAbout from '@/components/About/BodyAbout'
+import { TopUserBar } from '@/components/shared/TopUserBar'
 import Head from 'next/head'
 
 const About = () => {
@@ -11,6 +12,7 @@ const About = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
+            <TopUserBar />
             <BodyAbout />
         </>
     )
