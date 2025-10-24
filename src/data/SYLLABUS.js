@@ -61,7 +61,7 @@ export const SKILL_BADGES = [
     },
     {
         id: 13,
-        name: 'Cloud Functions: 3 Ways',
+        name: 'Cloud Run Functions: 3 Ways',
         url: 'https://www.cloudskillsboost.google/course_templates/696'
     },
     {
@@ -100,7 +100,7 @@ export const SKILL_BADGES = [
 export const ARCADE_GAMES = [
     {
         id: 1,
-        name: 'Gen AI Arcade Game: Level 3',
+        name: 'Level 3: Generative AI',
         url: 'https://www.skills.google/games/6554'
     },
 ]
