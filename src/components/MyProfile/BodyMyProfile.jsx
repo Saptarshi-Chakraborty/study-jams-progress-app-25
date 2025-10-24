@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Trophy, FlaskConical, Users, ExternalLink, Loader2, Award, Gamepad2, CheckCircle2, XCircle } from 'lucide-react'
+import { Trophy, FlaskConical, Users, ExternalLink, Loader2, Award, Gamepad2, CheckCircle2, XCircle, LogOut } from 'lucide-react'
 import { PROFILE_DATA } from './data'
 import BottomNavigation from '../shared/BottomNavigation'
 import { SKILL_BADGES as skillBadges, ARCADE_GAMES as arcadeGames } from '../../data/SYLLABUS'
 import ActivityFeedSection from './ActivityFeedSection'
+import { useGlobalContext } from '../../context/GlobalContext'
 
 const BodyMyProfile = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { logout } = useGlobalContext();
 
   const completedSkillBadges = useMemo(() => {
     if (!profileData?.latest_report?.name_of_skill_badges_completed) return [];
@@ -22,7 +24,7 @@ const BodyMyProfile = () => {
     if (!profileData?.latest_report?.name_of_arcade_games_completed) return [];
     return profileData.latest_report.name_of_arcade_games_completed
       .split('|')
-      .map(name => name.replace('[Arcade Game]', '').trim())
+      .map(name => name.replace('[Game]', '').trim())
       .filter(Boolean);
   }, [profileData]);
 
@@ -99,6 +101,12 @@ const BodyMyProfile = () => {
     return <IconComponent className="w-3 h-3" />
   }
 
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      logout();
+    }
+  };
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col">
       <div className="max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto w-full h-full flex flex-col">
@@ -131,6 +139,14 @@ const BodyMyProfile = () => {
                 <p className="text-gray-600 dark:text-gray-400 max-w-md">
                   You don't have any profile data yet. This could be because you are not registered as a participant or your data hasn't been synced yet.
                 </p>
+                {/* Logout Button for users without profile data */}
+                <button
+                  onClick={handleLogout}
+                  className="mt-6 inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm"
+                >
+                  <LogOut className="h-5 w-5 mr-2" />
+                  Logout
+                </button>
               </div>
             ) : profileData && (
               <>
@@ -247,6 +263,17 @@ const BodyMyProfile = () => {
 
                 {/* Activity Feed Section: HIDE TEMPORARILY */}
                 {/* <ActivityFeedSection /> */}
+
+                {/* Logout Button Section */}
+                <section className="mt-8 flex justify-center">
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm cursor-pointer"
+                  >
+                    <LogOut className="h-5 w-5 mr-2" />
+                    Logout
+                  </button>
+                </section>
               </>
             )}
           </main>

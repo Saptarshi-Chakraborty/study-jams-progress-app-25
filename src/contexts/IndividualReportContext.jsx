@@ -120,7 +120,7 @@ export const IndividualReportProvider = ({ children }) => {
                 completed_arcade_games: participant.name_of_arcade_games_completed
                     ? participant.name_of_arcade_games_completed
                         .split('|')
-                        .map(name => name.replace('[Arcade Game]', '').trim())
+                        .map(name => name.replace('[Game]', '').trim())
                         .filter(Boolean)
                     : [],
             }));

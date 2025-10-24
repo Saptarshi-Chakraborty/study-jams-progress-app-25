@@ -36,7 +36,7 @@ export const SKILL_BADGES = [
     },
     {
         id: 8,
-        name: 'App Building with Appsheet',
+        name: 'App Building with AppSheet',
         url: 'https://www.cloudskillsboost.google/course_templates/635'
     },
     {
