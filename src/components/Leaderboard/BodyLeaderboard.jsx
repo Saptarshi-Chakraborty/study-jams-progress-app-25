@@ -7,7 +7,7 @@ const BodyLeaderboard = ({ initialData = [] }) => {
     const [searchQuery, setSearchQuery] = useState('')
 
     const filteredLeaderboard = initialData.filter(participant =>
-        participant.name.toLowerCase().includes(searchQuery.toLowerCase())
+        participant.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const getRankRowClass = (rank) => {
@@ -49,14 +49,11 @@ const BodyLeaderboard = ({ initialData = [] }) => {
                 <div className="flex-1 overflow-y-auto pb-20 no-scrollbar">
                     <div className="px-2 pt-2 pb-4 space-y-2">
                         {filteredLeaderboard.length > 0 ? (
-                            filteredLeaderboard.map((participant) => (
+                            filteredLeaderboard.map((participant, index) => (
                                 <div
-                                    key={participant.rank}
+                                    key={`${participant.rank}-${index}`}
                                     className={`flex items-center gap-4 p-2 rounded-lg mb-0 ${getRankRowClass(participant.rank)}`}
                                 >
-                                    {/* <p className="font-bold w-6 text-center text-gray-500 dark:text-gray-400">
-                                        {participant.rank}
-                                    </p> */}
                                     <img
                                         alt={participant.name}
                                         className="w-10 h-10 rounded-full object-cover"
@@ -82,7 +79,9 @@ const BodyLeaderboard = ({ initialData = [] }) => {
                                 </div>
                             ))
                         ) : (
-                            <p className="text-center text-gray-500 dark:text-gray-400 pt-4">No participants found.</p>
+                            <p className="text-center text-gray-500 dark:text-gray-400 pt-4">
+                                {searchQuery ? 'No participants found matching your search.' : 'No participants found.'}
+                            </p>
                         )}
                     </div>
                 </div>
