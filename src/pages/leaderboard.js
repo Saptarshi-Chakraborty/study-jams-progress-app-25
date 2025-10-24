@@ -4,7 +4,7 @@ import BodyLeaderboard from '@/components/Leaderboard/BodyLeaderboard'
 import { TopUserBar } from '@/components/shared/TopUserBar'
 import Head from 'next/head'
 
-const Leaderboard = () => {
+const Leaderboard = ({ initialLeaderboardData }) => {
     return (
         <>
             <Head>
@@ -13,9 +13,40 @@ const Leaderboard = () => {
             </Head>
 
             <TopUserBar />
-            <BodyLeaderboard />
+            <BodyLeaderboard initialData={initialLeaderboardData} />
         </>
     )
+}
+
+export async function getStaticProps() {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+    const API = `${BASE_URL}/leaderboard`;
+
+    try {
+        const response = await fetch(API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ sortBy: 'rank' })
+        });
+
+        const result = await response.json();
+
+        return {
+            props: {
+                initialLeaderboardData: result.status === 'success' ? result.data : []
+            },
+            revalidate: 3600 // Revalidate every hour (ISR)
+        };
+    } catch (error) {
+        console.error("Failed to fetch leaderboard data:", error);
+        return {
+            props: {
+                initialLeaderboardData: []
+            }
+        };
+    }
 }
 
 export default Leaderboard
