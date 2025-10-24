@@ -54,9 +54,9 @@ const BodyLeaderboard = ({ initialData = [] }) => {
                                     key={participant.rank}
                                     className={`flex items-center gap-4 p-2 rounded-lg mb-0 ${getRankRowClass(participant.rank)}`}
                                 >
-                                    <p className="font-bold w-6 text-center text-gray-500 dark:text-gray-400">
+                                    {/* <p className="font-bold w-6 text-center text-gray-500 dark:text-gray-400">
                                         {participant.rank}
-                                    </p>
+                                    </p> */}
                                     <img
                                         alt={participant.name}
                                         className="w-10 h-10 rounded-full object-cover"
