@@ -53,7 +53,7 @@ const ReportSelector = () => {
                 <button
                     onClick={() => refreshParticipants && refreshParticipants()}
                     disabled={loadingReports || !selectedReportId}
-                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shrink-0"
                     title="Refresh Report"
                 >
                     <RefreshCw className="h-5 w-5 text-gray-500 dark:text-gray-400" />
