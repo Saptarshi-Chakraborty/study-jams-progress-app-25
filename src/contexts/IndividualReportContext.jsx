@@ -13,6 +13,7 @@ export const IndividualReportProvider = ({ children }) => {
     const [loadingParticipants, setLoadingParticipants] = useState(false);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [showUnredeemedOnly, setShowUnredeemedOnly] = useState(false);
 
     useEffect(() => {
         const fetchReports = async () => {
@@ -154,10 +155,14 @@ export const IndividualReportProvider = ({ children }) => {
         setSelectedParticipant(participant);
     };
 
-    const filteredParticipants = useMemo(() => participants.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.email.toLowerCase().includes(searchTerm.toLowerCase())
-    ), [participants, searchTerm]);
+    const filteredParticipants = useMemo(() => {
+        return participants.filter(participant => {
+            const matchesSearch = participant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                participant.email.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesFilter = !showUnredeemedOnly || !participant.access_code_redeemed;
+            return matchesSearch && matchesFilter;
+        });
+    }, [participants, searchTerm, showUnredeemedOnly]);
 
     const value = {
         reports,
@@ -172,7 +177,9 @@ export const IndividualReportProvider = ({ children }) => {
         setSearchTerm,
         handleParticipantSelect,
         filteredParticipants,
-        refreshParticipants
+        refreshParticipants,
+        showUnredeemedOnly,
+        setShowUnredeemedOnly,
     };
 
     return (
