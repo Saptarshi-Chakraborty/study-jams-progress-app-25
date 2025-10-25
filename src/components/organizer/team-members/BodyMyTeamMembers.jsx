@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { ChevronDown, ChevronUp, Edit, Trash2, Eye, RefreshCw } from 'lucide-react'
 import BottomNavigation from '../../shared/BottomNavigation'
 import AddNewTeamMemberDialog from './AddNewTeamMemberDialog'
+import EditTeamMemberDialog from './EditTeamMemberDialog'
 import { ROLES } from '@/context/GlobalContext'
 
 const BodyMyTeamMembers = () => {
@@ -11,6 +12,8 @@ const BodyMyTeamMembers = () => {
 	const [currentUser, setCurrentUser] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
+	const [editDialogOpen, setEditDialogOpen] = useState(false)
+	const [selectedMember, setSelectedMember] = useState(null)
 
 	const fetchData = useCallback(async () => {
 		setLoading(true)
@@ -83,8 +86,48 @@ const BodyMyTeamMembers = () => {
 	}
 
 	const handleView = (id) => { console.log('View user:', id) }
-	const handleEdit = (id) => { console.log('Edit user:', id) }
-	const handleDelete = (id) => { console.log('Delete user:', id) }
+	
+	const handleEdit = (id) => {
+		const member = users.find(u => u.id === id)
+		if (member) {
+			setSelectedMember(member)
+			setEditDialogOpen(true)
+		}
+	}
+	
+	const handleDelete = async (id) => {
+		const member = users.find(u => u.id === id)
+		if (!member) return
+
+		const confirmed = window.confirm(`Are you sure you want to delete ${member.name}? This action cannot be undone.`)
+		if (!confirmed) return
+
+		const authToken = localStorage.getItem('authToken')
+		const BASE_URL = process.env.NEXT_PUBLIC_API_URL
+		const API = `${BASE_URL}/team-members/delete`
+
+		try {
+			const response = await fetch(API, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${authToken}`,
+				},
+				body: JSON.stringify({ id }),
+			})
+
+			const data = await response.json()
+
+			if (response.ok) {
+				alert('Team member deleted successfully!')
+				fetchData()
+			} else {
+				alert(`Error: ${data.message || 'Failed to delete team member.'}`)
+			}
+		} catch (err) {
+			alert(`Error: ${err.message || 'Failed to delete team member.'}`)
+		}
+	}
 
 	const SortIcon = ({ column }) => {
 		if (sortBy !== column) return null
@@ -169,6 +212,13 @@ const BodyMyTeamMembers = () => {
 
 				<BottomNavigation activeTab="team" />
 			</div>
+
+			<EditTeamMemberDialog 
+				open={editDialogOpen} 
+				onOpenChange={setEditDialogOpen} 
+				member={selectedMember}
+				onSuccess={fetchData}
+			/>
 
 			<style jsx>{`
 				.scrollbar-hide::-webkit-scrollbar {
