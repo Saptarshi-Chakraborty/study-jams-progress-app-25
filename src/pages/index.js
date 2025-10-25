@@ -8,7 +8,7 @@ const Leaderboard = ({ initialLeaderboardData, reportDate }) => {
     return (
         <>
             <Head>
-                <title>Leaderboard | Study Jams Progress Tracker</title>
+                <title>Study Jams Progress Tracker '25</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 

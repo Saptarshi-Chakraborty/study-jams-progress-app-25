@@ -80,9 +80,9 @@ const BodyAbout = () => {
                 For questions or support, reach out to us at{' '}
                 <a
                   className="font-medium text-blue-600 hover:underline"
-                  href="mailto:campus.gdg@email.com"
+                  href="mailto:gdgocsupport@google.com"
                 >
-                  campus.gdg@email.com
+                  gdgocsupport@google.com
                 </a>
                 {' '}or connect with us on social media. We're here to help you
                 succeed!

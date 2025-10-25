@@ -1,4 +1,4 @@
-import { Home, UploadCloud, BarChart2, User, Building2Icon, ShieldUser, Users, FileChartColumnIncreasing, ChartNoAxesCombined } from 'lucide-react';
+import { Home, UploadCloud, BarChart2, User, Building2Icon, ShieldUser, UsersIcon, FileChartColumnIncreasing, ChartNoAxesCombined } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useGlobalContext, ROLES } from '../../context/GlobalContext';
@@ -20,6 +20,7 @@ export const TopUserBar = () => {
         // { name: 'My Participants', icon: Users, href: '/participants', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
         { name: 'Chapters', icon: Building2Icon, href: '/admin/chapters', roles: [ROLES.ADMIN] },
         { name: 'Users', icon: ShieldUser, href: '/admin/users', roles: [ROLES.ADMIN] },
+        { name: 'Team Members', icon: UsersIcon, href: '/organiser/team-members', roles: [ROLES.ORGANISER] },
     ];
 
     return (
