@@ -261,7 +261,7 @@ const BodyMyProfile = () => {
                 {/* Syllabus Completion Banner */}
                 {profileData.latest_report.no_of_skill_badges_completed >= 19 && profileData.latest_report.no_of_arcade_games_completed >= 1 && (
                   <section className="mt-8">
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white shadow-lg">
+                    <div className="p-4 rounded-xl bg-gradient-to-r from-purple-600 via-blue-500 to-green-400 text-white shadow-lg">
                       <div className="flex items-center">
                         <Trophy className="h-10 w-10 mr-4 flex-shrink-0" />
                         <div>
