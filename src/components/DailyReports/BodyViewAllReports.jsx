@@ -50,6 +50,44 @@ const BodyViewAllReports = () => {
         }
     }, []);
 
+    // Helper function to calculate the difference from the previous report
+    const calculateDifference = (currentValue, index, field) => {
+        if (index === reports.length - 1) {
+            // This is the oldest report, don't show anything
+            return null;
+        }
+        
+        const previousReport = reports[index + 1];
+        const difference = currentValue - previousReport[field];
+        
+        if (difference > 0) {
+            return { value: difference, type: 'increase' };
+        } else if (difference < 0) {
+            return { value: Math.abs(difference), type: 'decrease' };
+        } else {
+            return { value: 0, type: 'neutral' };
+        }
+    };
+
+    // Helper function to render difference badge
+    const renderDifference = (diff) => {
+        if (!diff) return null;
+        
+        const colorClasses = {
+            increase: 'text-green-600 dark:text-green-400',
+            decrease: 'text-red-600 dark:text-red-400',
+            neutral: 'text-gray-500 dark:text-gray-400'
+        };
+        
+        const sign = diff.type === 'increase' ? '+' : diff.type === 'decrease' ? '-' : '+';
+        
+        return (
+            <span className={`ml-2 text-xs font-medium ${colorClasses[diff.type]}`}>
+                ({sign}{diff.value})
+            </span>
+        );
+    };
+
     useEffect(() => {
         fetchReports();
     }, [fetchReports]);
@@ -152,14 +190,28 @@ const BodyViewAllReports = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        {reports.map(report => (
+                        {reports.map((report, index) => (
                             <tr key={report.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{new Date(report.report_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_participants}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_skill_badges_completed}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_arcade_game_completed}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_all_labs_completed}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">{report.total_code_redeemed}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">
+                                    {report.total_participants}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
+                                    {report.total_skill_badges_completed}
+                                    {renderDifference(calculateDifference(report.total_skill_badges_completed, index, 'total_skill_badges_completed'))}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
+                                    {report.total_arcade_game_completed}
+                                    {renderDifference(calculateDifference(report.total_arcade_game_completed, index, 'total_arcade_game_completed'))}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
+                                    {report.total_all_labs_completed}
+                                    {renderDifference(calculateDifference(report.total_all_labs_completed, index, 'total_all_labs_completed'))}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
+                                    {report.total_code_redeemed}
+                                    {renderDifference(calculateDifference(report.total_code_redeemed, index, 'total_code_redeemed'))}
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{new Date(report.uploaded_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button onClick={() => handleDeleteClick(report.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
