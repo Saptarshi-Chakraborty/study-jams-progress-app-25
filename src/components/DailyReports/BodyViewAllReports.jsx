@@ -14,6 +14,9 @@ const BodyViewAllReports = () => {
     const [reportToDelete, setReportToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    // Check if user has edit permissions (admin or organiser)
+    const canEdit = user?.role === ROLES.ADMIN || user?.role === ROLES.ORGANISER;
+
     const fetchReports = useCallback(async () => {
         setLoading(true);
         setError(null);
