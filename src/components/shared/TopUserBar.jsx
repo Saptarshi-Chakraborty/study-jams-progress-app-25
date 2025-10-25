@@ -15,7 +15,7 @@ export const TopUserBar = () => {
     const navItems = [
         // { name: 'Home', icon: Home, href: '/my-profile' }, // All admin-level roles
         { name: 'Upload Report', icon: UploadCloud, href: '/daily_reports/upload', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
-        { name: 'Reports', icon: FileChartColumnIncreasing, href: '/daily_reports', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
+        { name: 'All Reports', icon: FileChartColumnIncreasing, href: '/daily_reports', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
         { name: 'Individual Reports', icon: ChartNoAxesCombined, href: '/individual-reports', roles: [ROLES.ADMIN, ROLES.ORGANISER, ROLES.TEAM_MEMBER] },
         // { name: 'My Participants', icon: Users, href: '/participants', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
         { name: 'Chapters', icon: Building2Icon, href: '/admin/chapters', roles: [ROLES.ADMIN] },
