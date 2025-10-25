@@ -20,4 +20,4 @@ const UploadReport = () => {
     )
 }
 
-export default AuthHOC(UploadReport, { role: [ROLES.ADMIN, ROLES.ORGANISER] })
+export default AuthHOC(UploadReport, { role: [ROLES.ADMIN, ROLES.ORGANISER, ROLES.TEAM_MEMBER] })

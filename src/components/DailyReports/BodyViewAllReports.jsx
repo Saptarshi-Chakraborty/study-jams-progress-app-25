@@ -2,9 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router';
 import { Loader2, AlertTriangle, Upload, RefreshCw, Trash2 } from 'lucide-react';
 import BottomNavigation from '../shared/BottomNavigation';
+import { useGlobalContext, ROLES } from '@/context/GlobalContext';
 
 const BodyViewAllReports = () => {
     const router = useRouter();
+    const { user } = useGlobalContext();
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -184,9 +186,11 @@ const BodyViewAllReports = () => {
                             <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">All Labs Done</th>
                             <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Codes Redeemed</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Uploaded At</th>
-                            <th scope="col" className="relative px-6 py-3">
-                                <span className="sr-only">Actions</span>
-                            </th>
+                            {canEdit && (
+                                <th scope="col" className="relative px-6 py-3">
+                                    <span className="sr-only">Actions</span>
+                                </th>
+                            )}
                         </tr>
                     </thead>
                     <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -213,12 +217,14 @@ const BodyViewAllReports = () => {
                                     {renderDifference(calculateDifference(report.total_code_redeemed, index, 'total_code_redeemed'))}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{new Date(report.uploaded_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button onClick={() => handleDeleteClick(report.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                        <span className="sr-only">Delete report</span>
-                                        <Trash2 className="h-5 w-5" />
-                                    </button>
-                                </td>
+                                {canEdit && (
+                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button onClick={() => handleDeleteClick(report.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                            <span className="sr-only">Delete report</span>
+                                            <Trash2 className="h-5 w-5" />
+                                        </button>
+                                    </td>
+                                )}
                             </tr>
                         ))}
                     </tbody>
@@ -242,13 +248,15 @@ const BodyViewAllReports = () => {
                 <div className="flex-1 overflow-y-auto pb-20 scrollbar-hide">
                     <main className="p-4 md:p-6 lg:p-8 xl:p-10">
                         <div className="flex justify-end gap-4 mb-4">
-                            <button
-                                onClick={() => router.push('/daily_reports/upload')}
-                                className="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
-                            >
-                                <Upload className="h-5 w-5 mr-2" />
-                                Upload Report
-                            </button>
+                            {canEdit && (
+                                <button
+                                    onClick={() => router.push('/daily_reports/upload')}
+                                    className="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
+                                >
+                                    <Upload className="h-5 w-5 mr-2" />
+                                    Upload Report
+                                </button>
+                            )}
                             <button
                                 onClick={fetchReports}
                                 disabled={loading}
