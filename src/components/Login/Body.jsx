@@ -144,9 +144,9 @@ const BodyLogin = () => {
                 <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   {step === 'email' ? 'Sign in with Email' : 'Enter OTP'}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-base font-medium text-gray-700 dark:text-gray-300">
                   {step === 'email'
-                    ? 'Receive a one-time passcode to continue.'
+                    ? 'Enter the same email address that you used to register in Study Jams 2025.'
                     : `We sent a 5-digit code to ${email}.`}
                 </p>
               </div>
