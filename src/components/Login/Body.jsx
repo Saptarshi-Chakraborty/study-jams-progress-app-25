@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import BottomNavigation from '../shared/BottomNavigation'
 
 const BodyLogin = () => {
   const router = useRouter()
@@ -137,7 +138,7 @@ const BodyLogin = () => {
         </header>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto pb-16 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto pb-20 scrollbar-hide">
           <main className="flex items-center justify-center px-4 py-10">
             <section className="w-full max-w-xl space-y-6 rounded-3xl border border-gray-200/60 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-gray-800/60 dark:bg-gray-800/70">
               <div className="space-y-2 text-center">
@@ -236,6 +237,9 @@ const BodyLogin = () => {
             </section>
           </main>
         </div>
+
+        {/* Footer Navigation */}
+        <BottomNavigation activeTab="login" />
 
         <style jsx>{`
           .scrollbar-hide::-webkit-scrollbar {
