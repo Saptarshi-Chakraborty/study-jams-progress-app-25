@@ -9,20 +9,20 @@ const Leaderboard = ({ initialLeaderboardData, reportDate }) => {
         <>
             <Head>
                 <title>Study Jams Progress Tracker '25</title>
-                <link rel="icon" href="/icon-16x9.png" type="image/png" sizes="16x9"/>
-                <link rel="icon" href="/icon-32x18.png" type="image/png" sizes="32x18"/>
+                <link rel="icon" href="/Icon-16x9.png" type="image/png" sizes="16x9"/>
+                <link rel="icon" href="/Icon-32x18.png" type="image/png" sizes="32x18"/>
 
                 {/* Open Graph Meta Tags */}
                 <meta property="og:title" content="Study Jams Progress Tracker '25" />
                 <meta property="og:description" content="Track your progress in Study Jams '25" />
-                <meta property="og:image" content="/icon-16x9.png" />
+                <meta property="og:image" content="/Icon-16x9.png" />
                 <meta property="og:url" content="https://study-jams-25.pages.dev/" />    
 
                 {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Study Jams Progress Tracker '25" />
                 <meta name="twitter:description" content="Track your progress in Study Jams '25" />
-                <meta name="twitter:image" content="/icon-16x9.png" />
+                <meta name="twitter:image" content="/Icon-16x9.png" />
                 <meta name="twitter:url" content="https://study-jams-25.pages.dev/" />
             </Head>
 

@@ -10,8 +10,8 @@ const MyProfile = () => {
         <>
             <Head>
                 <title>My Profile | Study Jams Progress Tracker</title>
-                <link rel="icon" href="/icon-16x9.png" type="image/png" sizes="16x9"/>
-                <link rel="icon" href="/icon-32x18.png" type="image/png" sizes="32x18"/>
+                <link rel="icon" href="/Icon-16x9.png" type="image/png" sizes="16x9"/>
+                <link rel="icon" href="/Icon-32x18.png" type="image/png" sizes="32x18"/>
             </Head>
 
             <TopUserBar />
