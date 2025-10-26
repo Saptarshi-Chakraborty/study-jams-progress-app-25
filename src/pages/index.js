@@ -9,7 +9,8 @@ const Leaderboard = ({ initialLeaderboardData, reportDate }) => {
         <>
             <Head>
                 <title>Study Jams Progress Tracker '25</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/icon-16x9.png" type="image/png" sizes="16x9"/>
+                <link rel="icon" href="/icon-32x18.png" type="image/png" sizes="32x18"/>
             </Head>
 
             <TopUserBar />

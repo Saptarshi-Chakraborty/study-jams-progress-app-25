@@ -10,7 +10,6 @@ const MyTeamMembers = () => {
         <>
             <Head>
                 <title>My Team Members | Study Jams Progress Tracker</title>
-                <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <TopUserBar />

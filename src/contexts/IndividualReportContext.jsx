@@ -19,7 +19,7 @@ export const IndividualReportProvider = ({ children }) => {
     const [showNoArcadeGames, setShowNoArcadeGames] = useState(false);
     const [minSkillBadges, setMinSkillBadges] = useState(0);
     const [showSkillBadgeFilter, setShowSkillBadgeFilter] = useState(false);
-    const [showFilters, setShowFilters] = useState(true);
+    const [showFilters, setShowFilters] = useState(false);
     
     const workerRef = useRef(null);
     const debounceTimerRef = useRef(null);

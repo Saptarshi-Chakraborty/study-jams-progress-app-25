@@ -9,7 +9,7 @@ const Leaderboard = ({ initialLeaderboardData, reportDate }) => {
         <>
             <Head>
                 <title>Leaderboard | Study Jams Progress Tracker</title>
-                <link rel="icon" href="/favicon.ico" />
+               
             </Head>
 
             <TopUserBar />

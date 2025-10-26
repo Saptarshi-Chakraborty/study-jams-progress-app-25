@@ -12,7 +12,6 @@ const MyParticipants = () => {
         <>
             <Head>
                 <title>My Participants | Study Jams Progress Tracker</title>
-                <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <TopUserBar />

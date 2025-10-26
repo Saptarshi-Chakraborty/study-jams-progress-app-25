@@ -11,7 +11,6 @@ const UploadReport = () => {
         <>
             <Head>
                 <title>Upload Report | Study Jams Progress Tracker</title>
-                <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <TopUserBar />
