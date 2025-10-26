@@ -23,6 +23,34 @@ const BodyLeaderboard = ({ initialData = [], reportDate = null }) => {
         }
     };
 
+    // Generate initials from name
+    const getInitials = (name) => {
+        if (!name) return '??';
+        const parts = name.trim().split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    };
+
+    // Generate consistent color based on name
+    const getAvatarColor = (name) => {
+        if (!name) return '#6B7280'; // gray fallback
+        
+        const colors = [
+            '#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6',
+            '#EC4899', '#06B6D4', '#14B8A6', '#F97316', '#6366F1'
+        ];
+        
+        // Simple hash function for consistent color assignment
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        
+        return colors[Math.abs(hash) % colors.length];
+    };
+
     return (
         <div className="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col">
             <div className="max-w-md mx-auto w-full h-full flex flex-col">
@@ -59,11 +87,15 @@ const BodyLeaderboard = ({ initialData = [], reportDate = null }) => {
                                     key={`${participant.rank}-${index}`}
                                     className={`flex items-center gap-4 p-2 rounded-lg mb-0 ${getRankRowClass(participant.rank)}`}
                                 >
-                                    <img
-                                        alt={participant.name}
-                                        className="w-10 h-10 rounded-full object-cover"
-                                        src={participant.image}
-                                    />
+                                    {/* CSS-based Avatar */}
+                                    <div 
+                                        className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm select-none"
+                                        style={{ backgroundColor: getAvatarColor(participant.name) }}
+                                        title={participant.name}
+                                    >
+                                        {getInitials(participant.name)}
+                                    </div>
+                                    
                                     <div className="flex-grow">
                                         <p className="font-medium text-gray-900 dark:text-gray-100">
                                             {participant.name}
