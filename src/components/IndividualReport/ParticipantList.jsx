@@ -26,6 +26,9 @@ const ParticipantList = () => {
     } = useIndividualReport();
 
     const isLoading = loadingParticipants || loadingFilter;
+    const totalCount = participants.length;
+    const filteredCount = filteredParticipants.length;
+    const hasActiveFilters = showUnredeemedOnly || showNoArcadeGames || showSkillBadgeFilter || searchTerm;
 
     return (
         <div className="w-1/3 lg:w-1/4 border-r border-gray-200 dark:border-gray-700 flex flex-col">
@@ -60,6 +63,28 @@ const ParticipantList = () => {
                         <Filter className="h-5 w-5" />
                     </button>
                 </div>
+                
+                {/* Results Count */}
+                {!loadingParticipants && totalCount > 0 && (
+                    <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                        {loadingFilter ? (
+                            <span className="flex items-center gap-1">
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                                Filtering...
+                            </span>
+                        ) : hasActiveFilters ? (
+                            <span>
+                                Showing <span className="font-semibold text-blue-500">{filteredCount}</span> of{' '}
+                                <span className="font-semibold">{totalCount}</span> participants
+                            </span>
+                        ) : (
+                            <span>
+                                Total: <span className="font-semibold">{totalCount}</span> participants
+                            </span>
+                        )}
+                    </div>
+                )}
+
                 {showFilters && (
                     <>
                         <div className="flex items-center gap-2 mt-2 flex-wrap">
