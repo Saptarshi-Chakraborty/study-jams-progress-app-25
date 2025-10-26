@@ -2,6 +2,8 @@ import React from 'react';
 import { Search, Loader2, Ticket, Award, Gamepad2, CheckCircle2, Filter } from 'lucide-react';
 import { useIndividualReport } from '../../contexts/IndividualReportContext';
 
+const MAX_SKILL_BADGES = 20;
+
 const ParticipantList = () => {
     const {
         loadingParticipants,
@@ -130,11 +132,11 @@ const ParticipantList = () => {
                             <input
                                 type="number"
                                 min="0"
-                                max="15"
+                                max={MAX_SKILL_BADGES}
                                 value={minSkillBadges === 0 ? '' : minSkillBadges}
                                 onChange={(e) => {
                                     const value = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
-                                    setMinSkillBadges(Math.max(0, Math.min(15, value || 0)));
+                                    setMinSkillBadges(Math.max(0, Math.min(MAX_SKILL_BADGES, value || 0)));
                                 }}
                                 disabled={loadingParticipants || participants.length === 0 || !showSkillBadgeFilter}
                                 className="w-16 px-2 py-1 text-xs border rounded bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
