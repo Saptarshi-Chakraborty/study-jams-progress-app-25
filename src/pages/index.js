@@ -9,14 +9,14 @@ const Leaderboard = ({ initialLeaderboardData, reportDate }) => {
         <>
             <Head>
                 <title>Study Jams Progress Tracker '25</title>
-                <link rel="icon" href="/Icon-16x9.png" type="image/png" sizes="16x9"/>
-                <link rel="icon" href="/Icon-32x18.png" type="image/png" sizes="32x18"/>
+                <link rel="icon" href="/Icon-16x9.png" type="image/png" sizes="16x9" />
+                <link rel="icon" href="/Icon-32x18.png" type="image/png" sizes="32x18" />
 
                 {/* Open Graph Meta Tags */}
                 <meta property="og:title" content="Study Jams Progress Tracker '25" />
                 <meta property="og:description" content="Track your progress in Study Jams '25" />
                 <meta property="og:image" content="/Icon.png" />
-                <meta property="og:url" content="https://study-jams-25.pages.dev/" />    
+                <meta property="og:url" content="https://study-jams-25.pages.dev/" />
 
                 {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
@@ -42,7 +42,7 @@ export async function getStaticProps() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ sortBy: 'rank' })
+            body: JSON.stringify({ sortBy: 'rank', chapter_id: 1 })
         });
 
         const result = await response.json();

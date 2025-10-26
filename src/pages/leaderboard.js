@@ -9,7 +9,7 @@ const Leaderboard = ({ initialLeaderboardData, reportDate }) => {
         <>
             <Head>
                 <title>Leaderboard | Study Jams Progress Tracker</title>
-               
+
             </Head>
 
             <TopUserBar />
@@ -28,7 +28,7 @@ export async function getStaticProps() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ sortBy: 'rank' })
+            body: JSON.stringify({ sortBy: 'rank', chapter_id: 1 })
         });
 
         const result = await response.json();

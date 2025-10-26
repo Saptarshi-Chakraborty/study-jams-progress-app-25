@@ -101,15 +101,15 @@ const BodyLeaderboard = ({ initialData = [], reportDate = null }) => {
                                             {participant.name}
                                         </p>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {participant.quests}/20 Labs Completed
+                                            {participant.total_completed}/20 Labs Completed
                                         </p>
                                     </div>
                                     <div className="flex flex-col items-end">
-                                        <p className="font-bold text-blue-600">{participant.completion}%</p>
+                                        <p className="font-bold text-blue-600">{participant.percentage}%</p>
                                         <div className="w-20 h-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-full mt-1">
                                             <div
                                                 className="h-full bg-blue-600 rounded-full"
-                                                style={{ width: `${participant.completion}%` }}
+                                                style={{ width: `${participant.percentage}%` }}
                                             ></div>
                                         </div>
                                     </div>
