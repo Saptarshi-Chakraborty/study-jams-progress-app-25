@@ -15,14 +15,14 @@ const Leaderboard = ({ initialLeaderboardData, reportDate }) => {
                 {/* Open Graph Meta Tags */}
                 <meta property="og:title" content="Study Jams Progress Tracker '25" />
                 <meta property="og:description" content="Track your progress in Study Jams '25" />
-                <meta property="og:image" content="/Icon-16x9.png" />
+                <meta property="og:image" content="/Icon.png" />
                 <meta property="og:url" content="https://study-jams-25.pages.dev/" />    
 
                 {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Study Jams Progress Tracker '25" />
                 <meta name="twitter:description" content="Track your progress in Study Jams '25" />
-                <meta name="twitter:image" content="/Icon-16x9.png" />
+                <meta name="twitter:image" content="/Icon.png" />
                 <meta name="twitter:url" content="https://study-jams-25.pages.dev/" />
             </Head>
 
