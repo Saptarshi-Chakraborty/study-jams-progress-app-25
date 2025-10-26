@@ -20,7 +20,7 @@ export const TopUserBar = () => {
         // { name: 'My Participants', icon: Users, href: '/participants', roles: [ROLES.ADMIN, ROLES.ORGANISER] },
         { name: 'Chapters', icon: Building2Icon, href: '/admin/chapters', roles: [ROLES.ADMIN] },
         { name: 'Users', icon: ShieldUser, href: '/admin/users', roles: [ROLES.ADMIN] },
-        { name: 'Team Members', icon: UsersIcon, href: '/organiser/team-members', roles: [ROLES.ORGANISER] },
+        // { name: 'Team Members', icon: UsersIcon, href: '/organiser/team-members', roles: [ROLES.ORGANISER] },
     ];
 
     return (
@@ -38,19 +38,25 @@ export const TopUserBar = () => {
                                 .map((item) => {
                                     const isActive = router.pathname === item.href;
                                     return (
-                                        <Link href={item.href} key={item.name} className="flex-shrink-0">
-                                            <div
-                                                className={`inline-flex items-center px-4 text-sm font-medium ${isActive
-                                                    ? 'text-blue-600'
-                                                    : 'text-gray-500 hover:text-gray-700'
-                                                    }`}
-                                            >
-                                                <item.icon className="mr-2 h-5 w-5" />
-                                                {item.name}
-                                            </div>
-                                        </Link>
+                                        <NavItem key={item.name}
+                                            router={router}
+                                            name={item.name}
+                                            href={item.href}
+                                            icon={item.icon} />
                                     );
                                 })}
+
+                            {
+                                ((user.role === "organiser" || user.role === 'admin') &&
+                                    (user.chapter_id && user.chapter_id > 0)) &&
+                                (
+                                    <NavItem
+                                        router={router}
+                                        name="Team Members"
+                                        href={`/organiser/team-members`}
+                                        icon={UsersIcon} />
+                                )
+                            }
                         </div>
                     </div>
                 </div>
@@ -58,3 +64,22 @@ export const TopUserBar = () => {
         </div>
     );
 };
+
+
+
+const NavItem = ({ router, name, href, icon: Icon }) => {
+    const isActive = router.pathname === href;
+    return (
+        <Link href={href} className="flex-shrink-0">
+            <div
+                className={`inline-flex items-center px-4 text-sm font-medium ${isActive
+                    ? 'text-blue-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
+            >
+                <Icon className="mr-2 h-5 w-5" />
+                {name}
+            </div>
+        </Link>
+    );
+}
