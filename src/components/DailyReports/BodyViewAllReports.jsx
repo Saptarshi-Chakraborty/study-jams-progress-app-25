@@ -58,7 +58,7 @@ const BodyViewAllReports = () => {
     // Helper function to calculate the difference from the previous report
     const calculateDifference = (currentValue, index, field) => {
         if (index === reports.length - 1) {
-            // This is the oldest report, don't show anything
+            // THis is the oldest report, don't show anything
             return null;
         }
         
@@ -87,7 +87,7 @@ const BodyViewAllReports = () => {
         const sign = diff.type === 'increase' ? '+' : diff.type === 'decrease' ? '-' : '+';
         
         return (
-            <span className={`ml-2 text-xs font-medium ${colorClasses[diff.type]}`}>
+            <span className={`ml-1 text-xs font-medium ${colorClasses[diff.type]}`}>
                 ({sign}{diff.value})
             </span>
         );
@@ -152,9 +152,9 @@ const BodyViewAllReports = () => {
 
         if (error) {
             return (
-                <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4">
+                <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded">
                     <div className="flex">
-                        <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
+                        <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400 flex-shrink-0" />
                         <div className="ml-3">
                             <h3 className="text-sm font-medium text-red-800 dark:text-red-300">
                                 An error occurred
@@ -170,7 +170,7 @@ const BodyViewAllReports = () => {
 
         if (reports.length === 0) {
             return (
-                <div className="text-center py-16">
+                <div className="text-center py-16 px-4">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">No reports found</h3>
                     <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Upload a report to see it here.</p>
                 </div>
@@ -178,61 +178,131 @@ const BodyViewAllReports = () => {
         }
 
         return (
-            <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
-                        <tr>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Report Date</th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Participants</th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Skill Badges</th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Arcade Games</th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">All Labs Done</th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Codes Redeemed</th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Uploaded At</th>
-                            {canEdit && (
-                                <th scope="col" className="relative px-6 py-3">
-                                    <span className="sr-only">Actions</span>
-                                </th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        {reports.map((report, index) => (
-                            <tr key={report.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{new Date(report.report_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">
-                                    {report.total_participants}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
-                                    {report.total_skill_badges_completed}
-                                    {renderDifference(calculateDifference(report.total_skill_badges_completed, index, 'total_skill_badges_completed'))}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
-                                    {report.total_arcade_game_completed}
-                                    {renderDifference(calculateDifference(report.total_arcade_game_completed, index, 'total_arcade_game_completed'))}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
-                                    {report.total_all_labs_completed}
-                                    {renderDifference(calculateDifference(report.total_all_labs_completed, index, 'total_all_labs_completed'))}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
-                                    {report.total_code_redeemed}
-                                    {renderDifference(calculateDifference(report.total_code_redeemed, index, 'total_code_redeemed'))}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{new Date(report.uploaded_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}</td>
+            <>
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-4">
+                    {reports.map((report, index) => (
+                        <div key={report.id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+                            <div className="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 className="font-bold text-gray-900 dark:text-gray-100">
+                                        {new Date(report.report_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                    </h3>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        Uploaded: {new Date(report.uploaded_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                    </p>
+                                </div>
                                 {canEdit && (
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => handleDeleteClick(report.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                            <span className="sr-only">Delete report</span>
-                                            <Trash2 className="h-5 w-5" />
-                                        </button>
-                                    </td>
+                                    <button 
+                                        onClick={() => handleDeleteClick(report.id)} 
+                                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1"
+                                    >
+                                        <Trash2 className="h-5 w-5" />
+                                    </button>
+                                )}
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded p-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Participants</p>
+                                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        {report.total_participants}
+                                    </p>
+                                </div>
+                                
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded p-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Skill Badges</p>
+                                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        {report.total_skill_badges_completed}
+                                        {renderDifference(calculateDifference(report.total_skill_badges_completed, index, 'total_skill_badges_completed'))}
+                                    </p>
+                                </div>
+                                
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded p-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Arcade Games</p>
+                                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        {report.total_arcade_game_completed}
+                                        {renderDifference(calculateDifference(report.total_arcade_game_completed, index, 'total_arcade_game_completed'))}
+                                    </p>
+                                </div>
+                                
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded p-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">All Labs</p>
+                                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        {report.total_all_labs_completed}
+                                        {renderDifference(calculateDifference(report.total_all_labs_completed, index, 'total_all_labs_completed'))}
+                                    </p>
+                                </div>
+                                
+                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded p-2 col-span-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Codes Redeemed</p>
+                                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                        {report.total_code_redeemed}
+                                        {renderDifference(calculateDifference(report.total_code_redeemed, index, 'total_code_redeemed'))}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead className="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Report Date</th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Participants</th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Skill Badges</th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Arcade Games</th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">All Labs Done</th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Codes Redeemed</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Uploaded At</th>
+                                {canEdit && (
+                                    <th scope="col" className="relative px-6 py-3">
+                                        <span className="sr-only">Actions</span>
+                                    </th>
                                 )}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            {reports.map((report, index) => (
+                                <tr key={report.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{new Date(report.report_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center">
+                                        {report.total_participants}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
+                                        {report.total_skill_badges_completed}
+                                        {renderDifference(calculateDifference(report.total_skill_badges_completed, index, 'total_skill_badges_completed'))}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
+                                        {report.total_arcade_game_completed}
+                                        {renderDifference(calculateDifference(report.total_arcade_game_completed, index, 'total_arcade_game_completed'))}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
+                                        {report.total_all_labs_completed}
+                                        {renderDifference(calculateDifference(report.total_all_labs_completed, index, 'total_all_labs_completed'))}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white text-center">
+                                        {report.total_code_redeemed}
+                                        {renderDifference(calculateDifference(report.total_code_redeemed, index, 'total_code_redeemed'))}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{new Date(report.uploaded_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}</td>
+                                    {canEdit && (
+                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button onClick={() => handleDeleteClick(report.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                <span className="sr-only">Delete report</span>
+                                                <Trash2 className="h-5 w-5" />
+                                            </button>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </>
         );
     };
 
@@ -250,7 +320,7 @@ const BodyViewAllReports = () => {
                 {/* Scrollable Section */}
                 <div className="flex-1 overflow-y-auto pb-20 scrollbar-hide">
                     <main className="p-4 md:p-6 lg:p-8 xl:p-10">
-                        <div className="flex justify-end gap-4 mb-4">
+                        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 mb-4">
                             {canEdit && (
                                 <button
                                     onClick={() => router.push('/daily_reports/upload')}
@@ -282,18 +352,18 @@ const BodyViewAllReports = () => {
             </div>
 
             {showConfirmDialog && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm w-full m-4">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm w-full">
                         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100" id="modal-title">Confirm Deletion</h3>
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             Are you sure you want to delete this report? This will also delete all individual participant records associated with it. This action cannot be undone.
                         </p>
-                        <div className="mt-5 sm:mt-6 flex justify-end space-x-3">
+                        <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row justify-end gap-3">
                             <button
                                 type="button"
                                 disabled={isDeleting}
                                 onClick={cancelDelete}
-                                className="inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm disabled:opacity-50"
+                                className="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm disabled:opacity-50"
                             >
                                 Cancel
                             </button>
@@ -301,7 +371,7 @@ const BodyViewAllReports = () => {
                                 type="button"
                                 disabled={isDeleting}
                                 onClick={confirmDelete}
-                                className="inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full sm:w-auto inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isDeleting ? (
                                     <>
@@ -316,6 +386,16 @@ const BodyViewAllReports = () => {
                     </div>
                 </div>
             )}
+
+            <style jsx>{`
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            `}</style>
         </div>
     )
 }
