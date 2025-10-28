@@ -20,6 +20,7 @@ export const IndividualReportProvider = ({ children }) => {
     const [minSkillBadges, setMinSkillBadges] = useState(0);
     const [showSkillBadgeFilter, setShowSkillBadgeFilter] = useState(false);
     const [showFilters, setShowFilters] = useState(false);
+    const [mobileView, setMobileView] = useState('list'); // 'list' or 'details'
     
     const workerRef = useRef(null);
     const debounceTimerRef = useRef(null);
@@ -219,6 +220,8 @@ export const IndividualReportProvider = ({ children }) => {
         if (selectedParticipant?.id === participant.id) return;
 
         setSelectedParticipant(participant);
+        // Auto-switch to details view on mobile when a participant is selected
+        setMobileView('details');
     };
 
     const value = {
@@ -246,6 +249,8 @@ export const IndividualReportProvider = ({ children }) => {
         setShowSkillBadgeFilter,
         showFilters,
         setShowFilters,
+        mobileView,
+        setMobileView,
     };
 
     return (
