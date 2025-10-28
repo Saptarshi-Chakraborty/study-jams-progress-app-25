@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Loader2, Ticket, Award, Gamepad2, CheckCircle2, Filter } from 'lucide-react';
+import { Search, Loader2, Ticket, Award, Gamepad2, CheckCircle2, Filter, X } from 'lucide-react';
 import { useIndividualReport } from '../../contexts/IndividualReportContext';
 
 const MAX_SKILL_BADGES = 20;
@@ -24,7 +24,8 @@ const ParticipantList = () => {
         showSkillBadgeFilter,
         setShowSkillBadgeFilter,
         showFilters,
-        setShowFilters
+        setShowFilters,
+        mobileView
     } = useIndividualReport();
 
     const isLoading = loadingParticipants || loadingFilter;
@@ -33,15 +34,15 @@ const ParticipantList = () => {
     const hasActiveFilters = showUnredeemedOnly || showNoArcadeGames || showSkillBadgeFilter || searchTerm;
 
     return (
-        <div className="w-1/3 lg:w-1/4 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-            <div className="p-3 py-1 border-b border-gray-200 dark:border-gray-700">
+        <div className={`w-full lg:w-1/4 lg:border-r border-gray-200 dark:border-gray-700 flex flex-col ${mobileView === 'details' ? 'hidden lg:flex' : 'flex'}`}>
+            <div className="p-3 py-2 border-b border-gray-200 dark:border-gray-700">
                 <div className="relative flex items-center gap-2">
                     <div className="relative flex-grow">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                         <input
                             type="text"
                             placeholder="Search participants..."
-                            className="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full pl-10 pr-4 py-2.5 border rounded-lg bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             disabled={loadingParticipants || participants.length === 0}
@@ -55,7 +56,7 @@ const ParticipantList = () => {
                     <button
                         onClick={() => setShowFilters(!showFilters)}
                         disabled={loadingParticipants || participants.length === 0}
-                        className={`p-2 rounded-lg border transition-colors duration-200 cursor-pointer ${
+                        className={`p-2.5 rounded-lg border transition-colors duration-200 cursor-pointer ${
                             showFilters
                                 ? 'bg-blue-500 border-blue-600 text-white'
                                 : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
@@ -88,44 +89,60 @@ const ParticipantList = () => {
                 )}
 
                 {showFilters && (
-                    <>
-                        <div className="flex items-center gap-2 mt-2 flex-wrap">
-                            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Filters:</span>
+                    <div className="mt-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Filters</span>
+                            {hasActiveFilters && (
+                                <button
+                                    onClick={() => {
+                                        setSearchTerm('');
+                                        setShowUnredeemedOnly(false);
+                                        setShowNoArcadeGames(false);
+                                        setShowSkillBadgeFilter(false);
+                                        setMinSkillBadges(0);
+                                    }}
+                                    className="text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1"
+                                >
+                                    <X className="h-3 w-3" />
+                                    Clear all
+                                </button>
+                            )}
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-2">
                             <button
                                 onClick={() => setShowUnredeemedOnly(!showUnredeemedOnly)}
                                 disabled={loadingParticipants || participants.length === 0}
-                                className={`px-3 py-1 text-xs rounded border transition-colors duration-200 cursor-pointer ${
+                                className={`px-3 py-2 text-sm rounded-lg border transition-colors duration-200 cursor-pointer ${
                                     showUnredeemedOnly
                                         ? 'bg-red-500 border-red-600 text-white'
                                         : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400'
                                 } disabled:opacity-50 disabled:cursor-not-allowed`}
-                                title={showUnredeemedOnly ? "Show all participants" : "Show unredeemed only"}
                             >
                                 Not Redeemed
                             </button>
                             <button
                                 onClick={() => setShowNoArcadeGames(!showNoArcadeGames)}
                                 disabled={loadingParticipants || participants.length === 0}
-                                className={`px-3 py-1 text-xs rounded border transition-colors duration-200 cursor-pointer ${
+                                className={`px-3 py-2 text-sm rounded-lg border transition-colors duration-200 cursor-pointer ${
                                     showNoArcadeGames
                                         ? 'bg-purple-500 border-purple-600 text-white'
                                         : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400'
                                 } disabled:opacity-50 disabled:cursor-not-allowed`}
-                                title={showNoArcadeGames ? "Show all participants" : "Show participants with no arcade games"}
                             >
                                 No Arcade Games
                             </button>
                         </div>
-                        <div className="flex items-center gap-2 mt-2">
+                        
+                        <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setShowSkillBadgeFilter(!showSkillBadgeFilter)}
                                 disabled={loadingParticipants || participants.length === 0}
-                                className={`px-3 py-1 text-xs rounded border transition-colors duration-200 cursor-pointer ${
+                                className={`px-3 py-2 text-sm rounded-lg border transition-colors duration-200 cursor-pointer flex-grow ${
                                     showSkillBadgeFilter
                                         ? 'bg-blue-500 border-blue-600 text-white'
                                         : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400'
-                                } disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap`}
-                                title="Filter by minimum skill badges"
+                                } disabled:opacity-50 disabled:cursor-not-allowed`}
                             >
                                 Skill Badges &lt;
                             </button>
@@ -139,11 +156,11 @@ const ParticipantList = () => {
                                     setMinSkillBadges(Math.max(0, Math.min(MAX_SKILL_BADGES, value || 0)));
                                 }}
                                 disabled={loadingParticipants || participants.length === 0 || !showSkillBadgeFilter}
-                                className="w-16 px-2 py-1 text-xs border rounded bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-20 px-3 py-2 text-sm border rounded-lg bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                 placeholder="0"
                             />
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
             <div className="flex-grow overflow-y-auto">
@@ -154,26 +171,26 @@ const ParticipantList = () => {
                 ) : filteredParticipants.length > 0 ? filteredParticipants.map(participant => (
                     <div
                         key={participant.id}
-                        className={`px-4 py-1 pt-2 cursor-pointer border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 ${selectedParticipant?.id === participant.id ? 'bg-blue-100 dark:bg-blue-900/50' : ''}`}
+                        className={`px-4 py-3 cursor-pointer border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 ${selectedParticipant?.id === participant.id ? 'bg-blue-100 dark:bg-blue-900/50' : ''}`}
                         onClick={() => handleParticipantSelect(participant)}
                     >
-                        <p className="font-semibold text-gray-900 dark:text-white truncate">{participant.name}</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{participant.email}</p>
-                        <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        <p className="font-semibold text-gray-900 dark:text-white text-base truncate">{participant.name}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 truncate">{participant.email}</p>
+                        <div className="flex items-center space-x-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
                             <div className="flex items-center" title={participant.access_code_redeemed ? "Access Code Redeemed" : "Access Code Not Redeemed"}>
-                                <Ticket className={`h-4 w-4 ${participant.access_code_redeemed ? 'text-green-500' : 'text-red-500'}`} />
+                                <Ticket className={`h-5 w-5 ${participant.access_code_redeemed ? 'text-green-500' : 'text-red-500'}`} />
                             </div>
                             <div className="flex items-center" title="Skill Badges Completed">
-                                <Award className="h-4 w-4 mr-1 text-blue-500" />
-                                <span>{participant.no_of_skill_badges_completed}</span>
+                                <Award className="h-5 w-5 mr-1 text-blue-500" />
+                                <span className="font-medium">{participant.no_of_skill_badges_completed}</span>
                             </div>
                             <div className="flex items-center" title="Arcade Games Completed">
-                                <Gamepad2 className="h-4 w-4 mr-1 text-purple-500" />
-                                <span>{participant.no_of_arcade_games_completed}</span>
+                                <Gamepad2 className="h-5 w-5 mr-1 text-purple-500" />
+                                <span className="font-medium">{participant.no_of_arcade_games_completed}</span>
                             </div>
                             {participant.all_labs_completed && (
                                 <div className="flex items-center" title="All Labs Completed">
-                                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                    <CheckCircle2 className="h-5 w-5 text-green-500" />
                                 </div>
                             )}
                         </div>
