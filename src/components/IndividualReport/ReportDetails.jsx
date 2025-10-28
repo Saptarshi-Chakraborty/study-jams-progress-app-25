@@ -9,7 +9,7 @@ const ReportDetails = () => {
     return (
         <div className={`w-full lg:w-3/4 p-4 lg:p-6 overflow-y-auto ${mobileView === 'list' ? 'hidden lg:block' : 'block'}`}>
             {selectedParticipant ? (
-                <div className="bg-white dark:bg-gray-800 p-4 lg:p-8 rounded-lg shadow-lg">
+                <div className="bg-white dark:bg-gray-800 p-4 lg:p-8 rounded-lg shadow-lg mb-20 lg:mb-0">
                     {/* Mobile back button */}
                     <button
                         onClick={() => setMobileView('list')}
@@ -81,7 +81,7 @@ const ReportDetails = () => {
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 p-6">
+                <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 p-6 pb-24 lg:pb-6">
                     <User className="h-16 w-16 lg:h-20 lg:w-20 text-gray-400 mb-4" />
                     <h3 className="text-xl lg:text-2xl font-semibold">Select a Participant</h3>
                     <p className="mt-2 text-sm lg:text-base px-4">Choose a participant from the list to view their progress report.</p>
