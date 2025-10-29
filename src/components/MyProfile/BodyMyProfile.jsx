@@ -247,14 +247,16 @@ const BodyMyProfile = () => {
                         {profileData.latest_report.no_of_arcade_games_completed}
                       </p>
                     </div>
-                    <div className="col-span-2 rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
+
+                    {/* Last Lab completion : Temporarily Hidden */}
+                    {/* <div className="col-span-2 rounded-xl bg-gray-100 p-4 dark:bg-gray-800/50">
                       <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                         Last Lab Completion
                       </p>
                       <p className="text-xl font-bold text-gray-900 dark:text-white">
                         {lastLabCompletionContent}
                       </p>
-                    </div>
+                    </div> */}
                   </div>
                 </section>
 
